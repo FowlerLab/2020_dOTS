@@ -1,0 +1,361 @@
+Experiment,Site,Date,Sample,Name,X_lab,Indel_stringent,Indel,Reads_low_phred,Reads_no_nmer,Reads_passing,Total_indel_stringent,Total_indel
+1,FANCFg2 ON,,NP_17115_F2_OT1d1_1_FANCFg2_ON_S778_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_OT1d1_only_1,dRNA,0.011549878,0.016169829,6,4610,86581,10,14
+1,FANCFg2 ON,,NP_17115_F2_OT1d1_2_FANCFg2_ON_S779_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_OT1d1_only_2,dRNA,0.004657499,0.004657499,5,2742,85883,4,4
+1,FANCFg2 ON,,NP_17115_F2_OT1d1_3_FANCFg2_ON_S780_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_OT1d1_only_3,dRNA,0.013019537,0.016848813,12,5807,130573,17,22
+1,FANCFg2 ON,,NP_17115_NT_1_FANCFg2_ON_S781_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.013791374,0.015045135,5,2823,79760,11,12
+1,FANCFg2 ON,,NP_17115_NT_2_FANCFg2_ON_S782_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.009110683,0.011388354,5,2645,87809,8,10
+1,FANCFg2 ON,,NP_17115_NT_3_FANCFg2_ON_S783_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.01953776,0.026433439,6,4345,87011,17,23
+1,FANCFg2 ON predicted,,NP_17115_F2_OT1d1_1_FANCFg2_ON_S778_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_OT1d1_only_1,dRNA,0.011549878,0.016169829,6,4610,86581,10,14
+1,FANCFg2 ON predicted,,NP_17115_F2_OT1d1_2_FANCFg2_ON_S779_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_OT1d1_only_2,dRNA,0.004657499,0.004657499,5,2742,85883,4,4
+1,FANCFg2 ON predicted,,NP_17115_F2_OT1d1_3_FANCFg2_ON_S780_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_OT1d1_only_3,dRNA,0.013019537,0.016848813,12,5807,130573,17,22
+1,FANCFg2 ON predicted,,NP_17115_NT_1_FANCFg2_ON_S781_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.013791374,0.015045135,5,2823,79760,11,12
+1,FANCFg2 ON predicted,,NP_17115_NT_2_FANCFg2_ON_S782_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.009110683,0.011388354,5,2645,87809,8,10
+1,FANCFg2 ON predicted,,NP_17115_NT_3_FANCFg2_ON_S783_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.01953776,0.026433439,6,4345,87011,17,23
+1,FANCFg2 OT1,,NP_17115_F2_OT1d1_1_FANCFg2_OT1_S878_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_OT1d1_only_1,dRNA,0.006548503,0.012005588,11,4000,91624,6,11
+1,FANCFg2 OT1,,NP_17115_F2_OT1d1_2_FANCFg2_OT1_S879_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_OT1d1_only_2,dRNA,0.008563843,0.019574499,16,2917,81739,7,16
+1,FANCFg2 OT1,,NP_17115_F2_OT1d1_3_FANCFg2_OT1_S880_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_OT1d1_only_3,dRNA,0.00539613,0.01079226,12,4060,92659,5,10
+1,FANCFg2 OT1,,NP_17115_NT_1_FANCFg2_OT1_S881_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.010851535,0.015502194,8,1986,64507,7,10
+1,FANCFg2 OT1,,NP_17115_NT_2_FANCFg2_OT1_S882_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.00760842,0.01521684,12,3575,78860,6,12
+1,FANCFg2 OT1,,NP_17115_NT_3_FANCFg2_OT1_S883_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.008563568,0.017127137,13,4443,93419,8,16
+1,FANCFg2 OT1 predicted,,NP_17115_F2_OT1d1_1_FANCFg2_OT1_S878_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_OT1d1_only_1,dRNA,0.006548503,0.012005588,11,4000,91624,6,11
+1,FANCFg2 OT1 predicted,,NP_17115_F2_OT1d1_2_FANCFg2_OT1_S879_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_OT1d1_only_2,dRNA,0.008563843,0.019574499,16,2917,81739,7,16
+1,FANCFg2 OT1 predicted,,NP_17115_F2_OT1d1_3_FANCFg2_OT1_S880_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_OT1d1_only_3,dRNA,0.00539613,0.01079226,12,4060,92659,5,10
+1,FANCFg2 OT1 predicted,,NP_17115_NT_1_FANCFg2_OT1_S881_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.010851535,0.015502194,8,1986,64507,7,10
+1,FANCFg2 OT1 predicted,,NP_17115_NT_2_FANCFg2_OT1_S882_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.00760842,0.01521684,12,3575,78860,6,12
+1,FANCFg2 OT1 predicted,,NP_17115_NT_3_FANCFg2_OT1_S883_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.008563568,0.017127137,13,4443,93419,8,16
+2,HBB R03 ON,,NP_17115_R03_HBD_OTd4_1_HBB_ON_S942_pear.fastq.assembled.fastqwtf-difflib_indels.csv,HBB_R03_HBDd4_1,dRNA,0.039824974,0.061269191,43,13907,391714,156,240
+2,HBB R03 ON,,NP_17115_R03_HBD_OTd4_2_HBB_ON_S943_pear.fastq.assembled.fastqwtf-difflib_indels.csv,HBB_R03_HBDd4_2,dRNA,0.068220673,0.094248641,58,17730,364992,249,344
+2,HBB R03 ON,,NP_17115_R03_HBD_OTd4_3_HBB_ON_S944_pear.fastq.assembled.fastqwtf-difflib_indels.csv,HBB_R03_HBDd4_3,dRNA,0.061326528,0.086767664,50,16472,373411,229,324
+2,HBB R03 ON,,NP_17115_NT_1_HBB_ON_S945_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.080378592,0.103558935,45,14778,332178,267,344
+2,HBB R03 ON,,NP_17115_NT_2_HBB_ON_S946_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.077492681,0.104356811,40,13226,290350,225,303
+2,HBB R03 ON,,NP_17115_NT_3_HBB_ON_S947_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.053556546,0.081538337,65,16116,332359,178,271
+2,HBB R03 ON predicted,,NP_17115_R03_HBD_OTd4_3_HBB_ON_S944_pear.fastq.assembled.fastqwtf-difflib_indels.csv,HBB_R03_HBDd4_1,dRNA,0.679691087,0.679691087,50,0,389883,2650,2650
+2,HBB R03 ON predicted,,NP_17115_R03_HBD_OTd4_2_HBB_ON_S943_pear.fastq.assembled.fastqwtf-difflib_indels.csv,HBB_R03_HBDd4_2,dRNA,0.784381353,0.784381353,58,0,382722,3002,3002
+2,HBB R03 ON predicted,,NP_17115_R03_HBD_OTd4_1_HBB_ON_S942_pear.fastq.assembled.fastqwtf-difflib_indels.csv,HBB_R03_HBDd4_3,dRNA,0.580591242,0.580591242,43,0,405621,2355,2355
+2,HBB R03 ON predicted,,NP_17115_NT_3_HBB_ON_S947_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.8649114,0.8649114,65,0,348475,3014,3014
+2,HBB R03 ON predicted,,NP_17115_NT_2_HBB_ON_S946_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.752035734,0.752035734,40,0,303576,2283,2283
+2,HBB R03 ON predicted,,NP_17115_NT_1_HBB_ON_S945_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.594599892,0.594599892,45,0,346956,2063,2063
+2,HBB R03 HBD OT,,NP_17115_R03_HBD_OTd4_1_HBD_OT_S956_pear.fastq.assembled.fastqwtf-difflib_indels.csv,HBB_R03_HBDd4_1,dRNA,0.081833061,0.081833061,0,80,2444,2,2
+2,HBB R03 HBD OT,,NP_17115_R03_HBD_OTd4_2_HBD_OT_S957_pear.fastq.assembled.fastqwtf-difflib_indels.csv,HBB_R03_HBDd4_2,dRNA,0.073717949,0.078205128,13,6106,156000,115,122
+2,HBB R03 HBD OT,,NP_17115_R03_HBD_OTd4_3_HBD_OT_S958_pear.fastq.assembled.fastqwtf-difflib_indels.csv,HBB_R03_HBDd4_3,dRNA,0.107377781,0.11471655,22,11340,258899,278,297
+2,HBB R03 HBD OT,,NP_17115_NT_1_HBD_OT_S959_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.09240418,0.094861738,28,8163,203454,188,193
+2,HBB R03 HBD OT,,NP_17115_NT_2_HBD_OT_S960_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.096226206,0.101983329,19,9742,243177,234,248
+2,HBB R03 HBD OT,,NP_17115_NT_3_HBD_OT_S961_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.100737443,0.106303047,17,7825,179675,181,191
+2,HBB R03 HBD OT predicted,,NP_17115_R03_HBD_OTd4_1_HBD_OT_S956_pear.fastq.assembled.fastqwtf-difflib_indels.csv,HBB_R03_HBDd4_1,dRNA,0,0,0,121,2403,0,0
+2,HBB R03 HBD OT predicted,,NP_17115_R03_HBD_OTd4_2_HBD_OT_S957_pear.fastq.assembled.fastqwtf-difflib_indels.csv,HBB_R03_HBDd4_2,dRNA,0.010373444,0.02528527,13,7866,154240,16,39
+2,HBB R03 HBD OT predicted,,NP_17115_R03_HBD_OTd4_3_HBD_OT_S958_pear.fastq.assembled.fastqwtf-difflib_indels.csv,HBB_R03_HBDd4_3,dRNA,0.016403238,0.026557624,22,14192,256047,42,68
+2,HBB R03 HBD OT predicted,,NP_17115_NT_1_HBD_OT_S959_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.012924071,0.023362744,28,10442,201175,26,47
+2,HBB R03 HBD OT predicted,,NP_17115_NT_2_HBD_OT_S960_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.014572768,0.022483699,19,12745,240174,35,54
+2,HBB R03 HBD OT predicted,,NP_17115_NT_3_HBD_OT_S961_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.016908458,0.025362686,17,10074,177426,30,45
+3,VEGFAg1 ON,,NP_17115_V1_OT1d2_1_VEGFg1_ON_S115_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFg1_OT1d1_1,dRNA,0.005944655,0.014861638,8,6280,100931,6,15
+3,VEGFAg1 ON,,NP_17115_V1_OT1d2_2_VEGFg1_ON_S116_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFg1_OT1d1_2,dRNA,0.003929906,0.012182709,14,13161,254459,10,31
+3,VEGFAg1 ON,,NP_17115_V1_OT1d2_3_VEGFg1_ON_S117_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFg1_OT1d1_3,dRNA,0.004757662,0.013840471,9,12477,231206,11,32
+3,VEGFAg1 ON,,NP_17115_NT_1_VEGFg1_ON_S124_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.000678164,0.012206948,10,7488,147457,1,18
+3,VEGFAg1 ON,,NP_17115_NT_2_VEGFg1_ON_S125_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.00803428,0.011605071,6,5287,112020,9,13
+3,VEGFAg1 ON,,NP_17115_NT_3_VEGFg1_ON_S126_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.004097983,0.012293948,7,5377,97609,4,12
+3,VEGFAg1 ON predicted,,NP_17115_V1_OT1d2_1_VEGFg1_ON_S115_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFg1_OT1d1_1,dRNA,0.246816173,0.270081631,8,8352,98859,244,267
+3,VEGFAg1 ON predicted,,NP_17115_V1_OT1d2_2_VEGFg1_ON_S116_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFg1_OT1d1_2,dRNA,0.235795147,0.250632597,14,18251,249369,588,625
+3,VEGFAg1 ON predicted,,NP_17115_V1_OT1d2_3_VEGFg1_ON_S117_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFg1_OT1d1_3,dRNA,0.247859893,0.270352517,9,16942,226741,562,613
+3,VEGFAg1 ON predicted,,NP_17115_NT_1_VEGFg1_ON_S124_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.253900169,0.276038604,10,10400,144545,367,399
+3,VEGFAg1 ON predicted,,NP_17115_NT_2_VEGFg1_ON_S125_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.239628985,0.257851722,6,7554,109753,263,283
+3,VEGFAg1 ON predicted,,NP_17115_NT_3_VEGFg1_ON_S126_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.248328758,0.266141369,7,7548,95438,237,254
+3,VEGFAg1 OT1,,NP_17115_V1_OT1d2_1_VEGFg1_OT1_S151_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFg1_OT1d1_1,dRNA,0.001101031,0.006606183,10,5105,90824,1,6
+3,VEGFAg1 OT1,,NP_17115_V1_OT1d2_2_VEGFg1_OT1_S152_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFg1_OT1d1_2,dRNA,0.000880941,0.007928468,14,8026,113515,1,9
+3,VEGFAg1 OT1,,NP_17115_V1_OT1d2_3_VEGFg1_OT1_S153_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFg1_OT1d1_3,dRNA,0,0.044843049,70,372,4460,0,2
+3,VEGFAg1 OT1,,NP_17115_NT_1_VEGFg1_OT1_S154_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0,0.002417327,5,4132,82736,0,2
+3,VEGFAg1 OT1,,NP_17115_NT_2_VEGFg1_OT1_S155_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0,0.00279353,6,5686,71594,0,2
+3,VEGFAg1 OT1,,NP_17115_NT_3_VEGFg1_OT1_S156_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0,0,60,452,3809,0,0
+3,VEGFAg1 OT1 predicted,,NP_17115_V1_OT1d2_1_VEGFg1_OT1_S151_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFg1_OT1d1_1,dRNA,0.002181572,0.003272358,10,4252,91677,2,3
+3,VEGFAg1 OT1 predicted,,NP_17115_V1_OT1d2_2_VEGFg1_OT1_S152_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFg1_OT1d1_2,dRNA,0.005237339,0.014839126,14,6979,114562,6,17
+3,VEGFAg1 OT1 predicted,,NP_17115_V1_OT1d2_3_VEGFg1_OT1_S153_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFg1_OT1d1_3,dRNA,0,0,70,362,4470,0,0
+3,VEGFAg1 OT1 predicted,,NP_17115_NT_1_VEGFg1_OT1_S154_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0,0.003583587,5,3153,83715,0,3
+3,VEGFAg1 OT1 predicted,,NP_17115_NT_2_VEGFg1_OT1_S155_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.004142445,0.00828489,6,4859,72421,3,6
+3,VEGFAg1 OT1 predicted,,NP_17115_NT_3_VEGFg1_OT1_S156_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0,0,60,428,3833,0,0
+4,VEGFAg1 ON,,NP_17115_V1_OT6d4_1_VEGFg1_ON_S118_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT6d4_1,dRNA,0.008484446,0.015426266,4,6363,129649,11,20
+4,VEGFAg1 ON,,NP_17115_V1_OT6d4_2_VEGFg1_ON_S119_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT6d4_2,dRNA,0.00178142,0.010688519,8,4900,112270,2,12
+4,VEGFAg1 ON,,NP_17115_V1_OT6d4_3_VEGFg1_ON_S120_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT6d4_3,dRNA,0.001958231,0.014686732,4,5253,102133,2,15
+4,VEGFAg1 ON,,NP_17115_NT_1_VEGFg1_ON_S124_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.000678164,0.012206948,10,7488,147457,1,18
+4,VEGFAg1 ON,,NP_17115_NT_2_VEGFg1_ON_S125_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.00803428,0.011605071,6,5287,112020,9,13
+4,VEGFAg1 ON,,NP_17115_NT_3_VEGFg1_ON_S126_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.004097983,0.012293948,7,5377,97609,4,12
+4,VEGFAg1 ON predicted,,NP_17115_V1_OT6d4_1_VEGFg1_ON_S118_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT6d4_1,dRNA,0.003065745,0.00613149,4,5538,130474,4,8
+4,VEGFAg1 ON predicted,,NP_17115_V1_OT6d4_2_VEGFg1_ON_S119_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT6d4_2,dRNA,0.003543555,0.009744775,8,4289,112881,4,11
+4,VEGFAg1 ON predicted,,NP_17115_V1_OT6d4_3_VEGFg1_ON_S120_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT6d4_3,dRNA,0.003894308,0.007788617,4,4672,102714,4,8
+4,VEGFAg1 ON predicted,,NP_17115_NT_1_VEGFg1_ON_S124_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.000673886,0.00539109,10,6552,148393,1,8
+4,VEGFAg1 ON predicted,,NP_17115_NT_2_VEGFg1_ON_S125_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.004440734,0.007993321,6,4713,112594,5,9
+4,VEGFAg1 ON predicted,,NP_17115_NT_3_VEGFg1_ON_S126_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.003056266,0.009168798,7,4827,98159,3,9
+4,VEGFAg1 OT6,,NP_17115_V1_OT6d4_1_VEGFg1_OT6_S181_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT6d4_1,dRNA,0.004027062,0.008054124,46,10958,49664,2,4
+4,VEGFAg1 OT6,,NP_17115_V1_OT6d4_2_VEGFg1_OT6_S182_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT6d4_2,dRNA,0.076439613,0.078138271,58,10712,58870,45,46
+4,VEGFAg1 OT6,,NP_17115_V1_OT6d4_3_VEGFg1_OT6_S183_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT6d4_3,dRNA,0,0.021929825,465,1178,4560,0,1
+4,VEGFAg1 OT6,,NP_17115_NT_1_VEGFg1_OT6_S184_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.002412633,0.003618949,106,25125,82897,2,3
+4,VEGFAg1 OT6,,NP_17115_NT_2_VEGFg1_OT6_S185_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0,0.003199898,101,21558,62502,0,2
+4,VEGFAg1 OT6,,NP_17115_NT_3_VEGFg1_OT6_S186_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.002828374,0.005656749,88,18759,35356,1,2
+4,VEGFAg1 OT6 predicted,,NP_17115_V1_OT6d4_1_VEGFg1_OT6_S181_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT6d4_1,dRNA,0.006027606,0.006027606,46,10851,49771,3,3
+4,VEGFAg1 OT6 predicted,,NP_17115_V1_OT6d4_2_VEGFg1_OT6_S182_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT6d4_2,dRNA,0.079678573,0.08476444,58,10595,58987,47,50
+4,VEGFAg1 OT6 predicted,,NP_17115_V1_OT6d4_3_VEGFg1_OT6_S183_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT6d4_3,dRNA,0,0.021934635,465,1179,4559,0,1
+4,VEGFAg1 OT6 predicted,,NP_17115_NT_1_VEGFg1_OT6_S184_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.001205197,0.001205197,106,25048,82974,1,1
+4,VEGFAg1 OT6 predicted,,NP_17115_NT_2_VEGFg1_OT6_S185_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.004795933,0.004795933,101,21507,62553,3,3
+4,VEGFAg1 OT6 predicted,,NP_17115_NT_3_VEGFg1_OT6_S186_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0,0,88,18736,35379,0,0
+5,VEGFAg1 ON,,NP_17115_V1_OT11d7_1_VEGFg1_ON_S121_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT11d7_1,dRNA,0.003084873,0.01233949,6,5568,129665,4,16
+5,VEGFAg1 ON,,NP_17115_V1_OT11d7_2_VEGFg1_ON_S122_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT11d7_2,dRNA,0,0,0,16,80,0,0
+5,VEGFAg1 ON,,NP_17115_V1_OT11d7_3_VEGFg1_ON_S123_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT11d7_3,dRNA,0.004571324,0.013713972,7,4271,87502,4,12
+5,VEGFAg1 ON,,NP_17115_NT_1_VEGFg1_ON_S124_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.000678164,0.012206948,10,7488,147457,1,18
+5,VEGFAg1 ON,,NP_17115_NT_2_VEGFg1_ON_S125_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.00803428,0.011605071,6,5287,112020,9,13
+5,VEGFAg1 ON,,NP_17115_NT_3_VEGFg1_ON_S126_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.004097983,0.012293948,7,5377,97609,4,12
+5,VEGFAg1 ON predicted,,NP_17115_V1_OT11d7_1_VEGFg1_ON_S121_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT11d7_1,dRNA,0.124237191,0.132050851,6,7252,127981,159,169
+5,VEGFAg1 ON predicted,,NP_17115_V1_OT11d7_2_VEGFg1_ON_S122_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT11d7_2,dRNA,0,0,0,15,81,0,0
+5,VEGFAg1 ON predicted,,NP_17115_V1_OT11d7_3_VEGFg1_ON_S123_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT11d7_3,dRNA,0.168010753,0.184232481,7,5469,86304,145,159
+5,VEGFAg1 ON predicted,,NP_17115_NT_1_VEGFg1_ON_S124_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.140624786,0.15022843,10,9167,145778,205,219
+5,VEGFAg1 ON predicted,,NP_17115_NT_2_VEGFg1_ON_S125_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.114672686,0.129119639,6,6557,110750,127,143
+5,VEGFAg1 ON predicted,,NP_17115_NT_3_VEGFg1_ON_S126_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.128853927,0.138206229,7,6753,96233,124,133
+5,VEGFAg1 OT11,,NP_17115_V1_OT11d7_1_VEGFg1_OT11_S211_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT11d7_1,dRNA,0,0,17,314,3401,0,0
+5,VEGFAg1 OT11,,NP_17115_V1_OT11d7_2_VEGFg1_OT11_S212_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT11d7_2,dRNA,0.001990911,0.006470462,657,9161,200913,4,13
+5,VEGFAg1 OT11,,NP_17115_V1_OT11d7_3_VEGFg1_OT11_S213_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT11d7_3,dRNA,0.003055562,0.009166687,657,9132,163636,5,15
+5,VEGFAg1 OT11,,NP_17115_NT_1_VEGFg1_OT11_S214_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.003447959,0.011493196,581,10099,174016,6,20
+5,VEGFAg1 OT11,,NP_17115_NT_2_VEGFg1_OT11_S215_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.006197323,0.015149011,598,8518,145224,9,22
+5,VEGFAg1 OT11,,NP_17115_NT_3_VEGFg1_OT11_S216_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.013145715,0.02026631,662,12074,182569,24,37
+5,VEGFAg1 OT11 predicted,,NP_17115_V1_OT11d7_1_VEGFg1_OT11_S211_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT11d7_1,dRNA,0,0,17,330,3385,0,0
+5,VEGFAg1 OT11 predicted,,NP_17115_V1_OT11d7_2_VEGFg1_OT11_S212_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT11d7_2,dRNA,0,0.004506805,657,10376,199698,0,9
+5,VEGFAg1 OT11 predicted,,NP_17115_V1_OT11d7_3_VEGFg1_OT11_S213_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg1_OT11d7_3,dRNA,0,0.006200704,657,11496,161272,0,10
+5,VEGFAg1 OT11 predicted,,NP_17115_NT_1_VEGFg1_OT11_S214_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0,0.004659018,581,12405,171710,0,8
+5,VEGFAg1 OT11 predicted,,NP_17115_NT_2_VEGFg1_OT11_S215_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.001395342,0.006976712,598,10408,143334,2,10
+5,VEGFAg1 OT11 predicted,,NP_17115_NT_3_VEGFg1_OT11_S216_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.00166251,0.006650042,662,14193,180450,3,12
+6,VEGFAg2 ON,,NP_17115_V2_OT1d1_1_VEGFg2_ON_S1110_R1_001.fastqwtf-difflib_indels.csv,VEGFAg2_OT1d1_1,dRNA,0,0,5406,3757,6304,0,0
+6,VEGFAg2 ON,,NP_17115_V2_OT1d1_2_VEGFg2_ON_S985_R1_001.fastqwtf-difflib_indels.csv,VEGFAg2_OT1d1_2,dRNA,0.002998703,0.003748379,5330,13308,133391,4,5
+6,VEGFAg2 ON,,NP_17115_V2_OT1d1_3_VEGFg2_ON_S986_R1_001.fastqwtf-difflib_indels.csv,VEGFAg2_OT1d1_3,dRNA,0.007516678,0.008456262,8568,17469,212860,16,18
+6,VEGFAg2 ON,,NP_17115_NT_1_VEGFg2_ON_S1063_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.080198943,0.085172521,27852,41686,160850,129,137
+6,VEGFAg2 ON,,NP_17115_NT_2_VEGFg2_ON_S251_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.006472701,0.011327227,17,18552,123596,8,14
+6,VEGFAg2 ON,,NP_17115_NT_3_VEGFg2_ON_S252_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.058483332,0.062618517,26,23327,169279,99,106
+6,VEGFAg2 ON predicted,,NP_17115_V2_OT1d1_1_VEGFg2_ON_S1110_R1_001.fastqwtf-difflib_indels.csv,NP_17115_V2_OT1d1_1_VEGFg2_ON_S1060_R1_001.fastqwtf-difflib_indels.csv,dRNA,0,0,5406,3757,6304,0,0
+6,VEGFAg2 ON predicted,,NP_17115_V2_OT1d1_2_VEGFg2_ON_S242_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NP_17115_V2_OT1d1_2_VEGFg2_ON_S1061_R1_001.fastqwtf-difflib_indels.csv,dRNA,1.023032305,1.026786552,14647,26725,53273,545,547
+6,VEGFAg2 ON predicted,,NP_17115_V2_OT1d1_3_VEGFg2_ON_S243_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT1d1_3,dRNA,0.069222715,0.072683851,12,16321,115569,80,84
+6,VEGFAg2 ON predicted,,NP_17115_NT_1_VEGFg2_ON_S1063_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.080198943,0.085172521,27852,41686,160850,129,137
+6,VEGFAg2 ON predicted,,NP_17115_NT_2_VEGFg2_ON_S251_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.006472701,0.011327227,17,18552,123596,8,14
+6,VEGFAg2 ON predicted,,NP_17115_NT_3_VEGFg2_ON_S252_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.058483332,0.062618517,26,23327,169279,99,106
+6,VEGFAg2 OT1,,NP_17115_V2_OT1d1_1_VEGFg2_OT1_S322_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT1d1_1,dRNA,0.4494195,3.953227082,31,32723,24031,108,950
+6,VEGFAg2 OT1,,NP_17115_V2_OT1d1_2_VEGFg2_OT1_S323_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT1d1_2,dRNA,0.281690141,3.887323944,5,3407,1775,5,69
+6,VEGFAg2 OT1,,NP_17115_V2_OT1d1_3_VEGFg2_OT1_S324_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT1d1_3,dRNA,0.423728814,3.919491525,2,2581,1888,8,74
+6,VEGFAg2 OT1,,NP_17115_NT_1_VEGFg2_OT1_S325_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.342016492,3.628654423,51,55752,42688,146,1549
+6,VEGFAg2 OT1,,NP_17115_NT_2_VEGFg2_OT1_S326_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.28237887,3.729467268,45,37829,29039,82,1083
+6,VEGFAg2 OT1,,NP_17115_NT_3_VEGFg2_OT1_S327_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.280819994,4.012605698,35,44478,32049,90,1286
+6,VEGFAg2 OT1 predicted,,NP_17115_V2_OT1d1_1_VEGFg2_OT1_S322_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT1d1_1,dRNA,0.4494195,3.953227082,31,32723,24031,108,950
+6,VEGFAg2 OT1 predicted,,NP_17115_V2_OT1d1_2_VEGFg2_OT1_S323_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT1d1_2,dRNA,0.281690141,3.887323944,5,3407,1775,5,69
+6,VEGFAg2 OT1 predicted,,NP_17115_V2_OT1d1_3_VEGFg2_OT1_S324_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT1d1_3,dRNA,0.423728814,3.919491525,2,2581,1888,8,74
+6,VEGFAg2 OT1 predicted,,NP_17115_NT_1_VEGFg2_OT1_S325_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.342016492,3.628654423,51,55752,42688,146,1549
+6,VEGFAg2 OT1 predicted,,NP_17115_NT_2_VEGFg2_OT1_S326_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.28237887,3.729467268,45,37829,29039,82,1083
+6,VEGFAg2 OT1 predicted,,NP_17115_NT_3_VEGFg2_OT1_S327_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.280819994,4.012605698,35,44478,32049,90,1286
+7,VEGFAg2 ON,,NP_17115_V2_OT2d8_1_VEGFg2_ON_S244_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT2d8_1,dRNA,0.012275964,0.014321958,9,11596,97752,12,14
+7,VEGFAg2 ON,,NP_17115_V2_OT2d8_2_VEGFg2_ON_S245_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT2d8_2,dRNA,0.033639352,0.038749127,23,21875,234844,79,91
+7,VEGFAg2 ON,,NP_17115_V2_OT2d8_3_VEGFg2_ON_S246_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT2d8_3,dRNA,0.043896291,0.049088326,22,17152,211863,93,104
+7,VEGFAg2 ON,,NP_17115_NT_1_VEGFg2_ON_S1063_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.080198943,0.085172521,27852,41686,160850,129,137
+7,VEGFAg2 ON,,NP_17115_NT_2_VEGFg2_ON_S251_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.006472701,0.011327227,17,18552,123596,8,14
+7,VEGFAg2 ON,,NP_17115_NT_3_VEGFg2_ON_S252_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.058483332,0.062618517,26,23327,169279,99,106
+7,VEGFAg2 ON predicted,,NP_17115_V2_OT2d8_1_VEGFg2_ON_S244_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT2d8_1,dRNA,0.11624587,0.119304972,9,11280,98068,114,117
+7,VEGFAg2 ON predicted,,NP_17115_V2_OT2d8_2_VEGFg2_ON_S245_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT2d8_2,dRNA,0.060789498,0.065465614,23,21481,235238,143,154
+7,VEGFAg2 ON predicted,,NP_17115_V2_OT2d8_3_VEGFg2_ON_S246_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT2d8_3,dRNA,0.139996805,0.147043625,22,16153,212862,298,313
+7,VEGFAg2 ON predicted,,NP_17115_NT_1_VEGFg2_ON_S988_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.017656352,0.018585633,8522,19225,107610,19,20
+7,VEGFAg2 ON predicted,,NP_17115_NT_2_VEGFg2_ON_S251_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.092491177,0.094925155,17,18893,123255,114,117
+7,VEGFAg2 ON predicted,,NP_17115_NT_3_VEGFg2_ON_S252_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.121432192,0.124379576,26,22964,169642,206,211
+7,VEGFAg2 OT2,,NP_17115_V2_OT2d8_1_VEGFg2_OT2_S397_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT2d8_1,dRNA,0.005960897,0.032188841,2331,3756,83880,5,27
+7,VEGFAg2 OT2,,NP_17115_V2_OT2d8_2_VEGFg2_OT2_S398_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT2d8_2,dRNA,0.001193246,0.032217648,1997,3484,83805,1,27
+7,VEGFAg2 OT2,,NP_17115_V2_OT2d8_3_VEGFg2_OT2_S399_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT2d8_3,dRNA,0.003920416,0.026462805,2683,4312,102030,4,27
+7,VEGFAg2 OT2,,NP_17115_NT_1_VEGFg2_OT2_S400_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.002763958,0.02763958,2577,4861,108540,3,30
+7,VEGFAg2 OT2,,NP_17115_NT_2_VEGFg2_OT2_S401_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.006816168,0.038624952,2335,4089,88026,6,34
+7,VEGFAg2 OT2,,NP_17115_NT_3_VEGFg2_OT2_S402_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.004304531,0.044480156,1879,4431,69694,3,31
+7,VEGFAg2 OT2 predicted,,NP_17115_V2_OT2d8_1_VEGFg2_OT2_S397_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT2d8_1,dRNA,0.007227087,0.031317378,2331,4615,83021,6,26
+7,VEGFAg2 OT2 predicted,,NP_17115_V2_OT2d8_2_VEGFg2_OT2_S398_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT2d8_2,dRNA,0.002401018,0.027611707,1997,3991,83298,2,23
+7,VEGFAg2 OT2 predicted,,NP_17115_V2_OT2d8_3_VEGFg2_OT2_S399_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT2d8_3,dRNA,0.003955892,0.023735351,2683,5227,101115,4,24
+7,VEGFAg2 OT2 predicted,,NP_17115_NT_1_VEGFg2_OT2_S400_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.001858857,0.026023998,2577,5808,107593,2,28
+7,VEGFAg2 OT2 predicted,,NP_17115_NT_2_VEGFg2_OT2_S401_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.005727771,0.030929961,2335,4821,87294,5,27
+7,VEGFAg2 OT2 predicted,,NP_17115_NT_3_VEGFg2_OT2_S402_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.002898047,0.034776561,1879,5113,69012,2,24
+8,VEGFAg2 ON,,NP_17115_V2_OT17d8_1_VEGFg2_ON_S247_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT17d8_1,dRNA,0.053483672,0.056990798,15,18439,228107,122,130
+8,VEGFAg2 ON,,NP_17115_V2_OT17d8_2_VEGFg2_ON_S248_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT17d8_2,dRNA,0.040174947,0.04307417,32,23924,241444,97,104
+8,VEGFAg2 ON,,NP_17115_V2_OT17d8_3_VEGFg2_ON_S1062_R1_001.fastqwtf-difflib_indels.csv,VEGFAg2_OT17d8_3,dRNA,0.097755064,0.101185066,22234,34612,116618,114,118
+8,VEGFAg2 ON,,NP_17115_NT_1_VEGFg2_ON_S1063_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.080198943,0.085172521,27852,41686,160850,129,137
+8,VEGFAg2 ON,,NP_17115_NT_2_VEGFg2_ON_S251_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.006472701,0.011327227,17,18552,123596,8,14
+8,VEGFAg2 ON,,NP_17115_NT_3_VEGFg2_ON_S252_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.058483332,0.062618517,26,23327,169279,99,106
+8,VEGFAg2 ON predicted,,NP_17115_V2_OT17d8_1_VEGFg2_ON_S247_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT17d8_1,dRNA,0.070502098,0.072691604,15,18184,228362,161,166
+8,VEGFAg2 ON predicted,,NP_17115_V2_OT17d8_2_VEGFg2_ON_S248_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT17d8_2,dRNA,0.076491164,0.080212356,32,23510,241858,185,194
+8,VEGFAg2 ON predicted,,NP_17115_V2_OT17d8_3_VEGFg2_ON_S249_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT17d8_3,dRNA,0.237837838,0.238610039,22234,21730,129500,308,309
+8,VEGFAg2 ON predicted,,NP_17115_NT_1_VEGFg2_ON_S250_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.011125843,0.011125843,8522,18978,107857,12,12
+8,VEGFAg2 ON predicted,,NP_17115_NT_2_VEGFg2_ON_S251_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.050312424,0.053558387,17,18918,123230,62,66
+8,VEGFAg2 ON predicted,,NP_17115_NT_3_VEGFg2_ON_S252_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.046554112,0.048321989,26,22911,169695,79,82
+8,VEGFAg2 OT17,,NP_17115_V2_OT17d8_1_VEGFg2_OT17_S427_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT17d8_1,dRNA,0.013753687,0.242981799,68,3609,65437,9,159
+8,VEGFAg2 OT17,,NP_17115_V2_OT17d8_2_VEGFg2_OT17_S428_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT17d8_2,dRNA,0.004226543,0.004226543,3278,7877,70980,3,3
+8,VEGFAg2 OT17,,NP_17115_V2_OT17d8_3_VEGFg2_OT17_S429_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT17d8_3,dRNA,0.033260161,0.321514889,71,2404,45099,15,145
+8,VEGFAg2 OT17,,NP_17115_NT_1_VEGFg2_OT17_S430_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.009442128,0.236053191,89,3495,63545,6,150
+8,VEGFAg2 OT17,,NP_17115_NT_2_VEGFg2_OT17_S431_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.012724728,0.225409464,57,2719,55011,7,124
+8,VEGFAg2 OT17,,NP_17115_NT_3_VEGFg2_OT17_S432_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.004132744,0.17770798,54,2563,48394,2,86
+8,VEGFAg2 OT17 predicted,,NP_17115_V2_OT17d8_1_VEGFg2_OT17_S427_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT17d8_1,dRNA,0.286765345,0.286765345,68,0,69046,198,198
+8,VEGFAg2 OT17 predicted,,NP_17115_V2_OT17d8_2_VEGFg2_OT17_S990_R1_001.fastqwtf-difflib_indels.csv,VEGFAg2_OT17d8_2,dRNA,0.216450216,0.216450216,0,0,462,1,1
+8,VEGFAg2 OT17 predicted,,NP_17115_V2_OT17d8_3_VEGFg2_OT17_S429_pear.fastq.assembled.fastqwtf-difflib_indels.csv,VEGFAg2_OT17d8_3,dRNA,0.126307812,0.126307812,71,0,47503,60,60
+8,VEGFAg2 OT17 predicted,,NP_17115_NT_1_VEGFg2_OT17_S430_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.201372315,0.201372315,89,0,67040,135,135
+8,VEGFAg2 OT17 predicted,,NP_17115_NT_2_VEGFg2_OT17_S431_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0.093538888,0.093538888,57,0,57730,54,54
+8,VEGFAg2 OT17 predicted,,NP_17115_NT_3_VEGFg2_OT17_S432_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.104009263,0.104009263,54,0,50957,53,53
+9,VEGFAg3 ON,,NP_180411_V3_d4_only_1_VEGFg3_ON_S907_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT4d1_1,dRNA,0.00845976,0.016919519,60808,2673,70924,6,12
+9,VEGFAg3 ON,,NP_180411_V3_d4_only_2_VEGFg3_ON_S908_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT4d1_2,dRNA,0.007088177,0.008860221,48799,2116,56432,4,5
+9,VEGFAg3 ON,,NP_180411_V3_d4_only_3_VEGFg3_ON_S909_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT4d1_3,dRNA,0.009390553,0.009390553,52605,2321,63894,6,6
+9,VEGFAg3 ON,,NP_180411_NT_1_VEGFg3_ON_S916_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.021991034,0.02537427,47756,2325,59115,13,15
+9,VEGFAg3 ON,,NP_180411_NT_2_VEGFg3_ON_S917_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0.010469012,0.012562814,40365,1775,47760,5,6
+9,VEGFAg3 ON,,NP_180411_NT_3_VEGFg3_ON_S918_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0.012949773,0.014799741,49618,1975,54055,7,8
+9,VEGFAg3 ON predicted,,NP_180411_V3_d4_only_1_VEGFg3_ON_S907_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT4d1_1,dRNA,0.009811617,0.018221574,60808,2253,71344,7,13
+9,VEGFAg3 ON predicted,,NP_180411_V3_d4_only_2_VEGFg3_ON_S908_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT4d1_2,dRNA,0.015872176,0.017635751,48799,1845,56703,9,10
+9,VEGFAg3 ON predicted,,NP_180411_V3_d4_only_3_VEGFg3_ON_S909_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT4d1_3,dRNA,0.012455627,0.012455627,52605,1987,64228,8,8
+9,VEGFAg3 ON predicted,,NP_180411_NT_1_VEGFg3_ON_S916_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.033630967,0.036994064,47756,1971,59469,20,22
+9,VEGFAg3 ON predicted,,NP_180411_NT_2_VEGFg3_ON_S917_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0.012503907,0.014587892,40365,1550,47985,6,7
+9,VEGFAg3 ON predicted,,NP_180411_NT_3_VEGFg3_ON_S918_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0.036803945,0.038644143,49618,1688,54342,20,21
+9,VEGFAg3 OT4,,NP_180411_V3_d4_only_1_VEGFg3_OT4_S952_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT4d1_1,dRNA,0,0,35459,5266,33127,0,0
+9,VEGFAg3 OT4,,NP_180411_V3_d4_only_2_VEGFg3_OT4_S953_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT4d1_2,dRNA,0,0,39871,6579,29981,0,0
+9,VEGFAg3 OT4,,NP_180411_V3_d4_only_3_VEGFg3_OT4_S954_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT4d1_3,dRNA,0,0,38085,4390,21338,0,0
+9,VEGFAg3 OT4,,NP_180411_NT_1_VEGFg3_OT4_S958_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0,0.003730508,38310,12100,26806,0,1
+9,VEGFAg3 OT4,,NP_180411_NT_2_VEGFg3_OT4_S959_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0,0,15235,11390,7002,0,0
+9,VEGFAg3 OT4,,NP_180411_NT_3_VEGFg3_OT4_S960_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0,0,40534,10973,27246,0,0
+9,VEGFAg3 OT4 predicted,,NP_180411_V3_d4_only_1_VEGFg3_OT4_S952_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT4d1_1,dRNA,0,0,35459,5266,33127,0,0
+9,VEGFAg3 OT4 predicted,,NP_180411_V3_d4_only_2_VEGFg3_OT4_S953_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT4d1_2,dRNA,0,0,39871,6579,29981,0,0
+9,VEGFAg3 OT4 predicted,,NP_180411_V3_d4_only_3_VEGFg3_OT4_S954_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT4d1_3,dRNA,0,0,38085,4390,21338,0,0
+9,VEGFAg3 OT4 predicted,,NP_180411_NT_1_VEGFg3_OT4_S958_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0,0.003730508,38310,12100,26806,0,1
+9,VEGFAg3 OT4 predicted,,NP_180411_NT_2_VEGFg3_OT4_S959_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0,0,15235,11390,7002,0,0
+9,VEGFAg3 OT4 predicted,,NP_180411_NT_3_VEGFg3_OT4_S960_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0,0,40534,10973,27246,0,0
+10,VEGFAg3 ON,,NP_180411_V3_d18_only_1_VEGFg3_ON_S910_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT18d5_1,dRNA,0.030873046,0.033078263,40263,1538,45347,14,15
+10,VEGFAg3 ON,,NP_180411_V3_d18_only_2_VEGFg3_ON_S911_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT18d5_2,dRNA,0.002241901,0.015693308,40527,1725,44605,1,7
+10,VEGFAg3 ON,,NP_180411_V3_d18_only_3_VEGFg3_ON_S912_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT18d5_3,dRNA,0.01131499,0.016972486,50377,2079,53027,6,9
+10,VEGFAg3 ON,,NP_180411_NT_1_VEGFg3_ON_S916_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.021991034,0.02537427,47756,2325,59115,13,15
+10,VEGFAg3 ON,,NP_180411_NT_2_VEGFg3_ON_S917_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0.010469012,0.012562814,40365,1775,47760,5,6
+10,VEGFAg3 ON,,NP_180411_NT_3_VEGFg3_ON_S918_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0.012949773,0.014799741,49618,1975,54055,7,8
+10,VEGFAg3 ON predicted,,NP_180411_V3_d18_only_1_VEGFg3_ON_S910_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT18d5_1,dRNA,0,0,40263,1450,45435,0,0
+10,VEGFAg3 ON predicted,,NP_180411_V3_d18_only_2_VEGFg3_ON_S911_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT18d5_2,dRNA,0,0,40527,1580,44750,0,0
+10,VEGFAg3 ON predicted,,NP_180411_V3_d18_only_3_VEGFg3_ON_S912_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT18d5_3,dRNA,0.00188292,0.00564876,50377,1997,53109,1,3
+10,VEGFAg3 ON predicted,,NP_180411_NT_1_VEGFg3_ON_S916_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.001686369,0.001686369,47756,2141,59299,1,1
+10,VEGFAg3 ON predicted,,NP_180411_NT_2_VEGFg3_ON_S917_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0,0,40365,1752,47783,0,0
+10,VEGFAg3 ON predicted,,NP_180411_NT_3_VEGFg3_ON_S918_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0,0,49618,1871,54159,0,0
+10,VEGFAg3 OT18,,NP_180411_V3_d18_only_1_VEGFg3_OT18_S966_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT18d5_1,dRNA,0.004351326,0.006526989,62255,6989,45963,2,3
+10,VEGFAg3 OT18,,NP_180411_V3_d18_only_2_VEGFg3_OT18_S967_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT18d5_2,dRNA,0.005414185,0.008121278,45204,5711,36940,2,3
+10,VEGFAg3 OT18,,NP_180411_V3_d18_only_3_VEGFg3_OT18_S968_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT18d5_3,dRNA,0.003276003,0.003276003,41745,5166,30525,1,1
+10,VEGFAg3 OT18,,NP_180411_NT_1_VEGFg3_OT18_S972_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.005313214,0.005313214,52600,6692,37642,2,2
+10,VEGFAg3 OT18,,NP_180411_NT_2_VEGFg3_OT18_S973_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0,0.004885198,38683,7072,40940,0,2
+10,VEGFAg3 OT18,,NP_180411_NT_3_VEGFg3_OT18_S748_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0,0,951,14085,315,0,0
+10,VEGFAg3 OT18 predicted,,NP_180411_V3_d18_only_1_VEGFg3_OT18_S966_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT18d5_1,dRNA,0.091607829,0.098310841,62255,8196,44756,41,44
+10,VEGFAg3 OT18 predicted,,NP_180411_V3_d18_only_2_VEGFg3_OT18_S967_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT18d5_2,dRNA,0.100854461,0.106457487,45204,6956,35695,36,38
+10,VEGFAg3 OT18 predicted,,NP_180411_V3_d18_only_3_VEGFg3_OT18_S968_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT18d5_3,dRNA,0.124688279,0.128058233,41745,6017,29674,37,38
+10,VEGFAg3 OT18 predicted,,NP_180411_NT_1_VEGFg3_OT18_S972_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.086836178,0.092263439,52600,7483,36851,32,34
+10,VEGFAg3 OT18 predicted,,NP_180411_NT_2_VEGFg3_OT18_S973_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0.150545728,0.150545728,38683,8157,39855,60,60
+10,VEGFAg3 OT18 predicted,,NP_180411_NT_3_VEGFg3_OT18_S748_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0,0,951,14086,314,0,0
+11,ZSCAN2g1 ON,,NP_17115_Z1_OT1d3_1_ZSCAN2g1_ON_S124_R1_001.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT1d3_1,dRNA,0,0.001621639,8756,2795,61666,0,1
+11,ZSCAN2g1 ON,,NP_17115_Z1_OT1d3_2_ZSCAN2g1_ON_S125_R1_001.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT1d3_2,dRNA,0,0.001735418,9235,2459,57623,0,1
+11,ZSCAN2g1 ON,,NP_17115_Z1_OT1d3_3_ZSCAN2g1_ON_S126_R1_001.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT1d3_3,dRNA,0,0,10456,3247,73651,0,0
+11,ZSCAN2g1 ON,,NP_17115_NT_1_ZSCAN2g1_ON_S130_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0,0.00299931,9438,2668,66682,0,2
+11,ZSCAN2g1 ON,,NP_17115_NT_2_ZSCAN2g1_ON_S131_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0.001161305,0.003483916,12243,3303,86110,1,3
+11,ZSCAN2g1 ON,,NP_17115_NT_3_ZSCAN2g1_ON_S132_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0,0,8093,2872,52988,0,0
+11,ZSCAN2g1 ON predicted,,NP_17115_Z1_OT1d3_1_ZSCAN2g1_ON_S124_R1_001.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT1d3_1,dRNA,0.001623113,0.003246226,8756,2851,61610,1,2
+11,ZSCAN2g1 ON predicted,,NP_17115_Z1_OT1d3_2_ZSCAN2g1_ON_S125_R1_001.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT1d3_2,dRNA,0.001740735,0.00348147,9235,2635,57447,1,2
+11,ZSCAN2g1 ON predicted,,NP_17115_Z1_OT1d3_3_ZSCAN2g1_ON_S126_R1_001.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT1d3_3,dRNA,0.004087361,0.006812268,10456,3501,73397,3,5
+11,ZSCAN2g1 ON predicted,,NP_17115_NT_1_ZSCAN2g1_ON_S130_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.001506796,0.003013591,9438,2984,66366,1,2
+11,ZSCAN2g1 ON predicted,,NP_17115_NT_2_ZSCAN2g1_ON_S131_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0.001163575,0.001163575,12243,3471,85942,1,1
+11,ZSCAN2g1 ON predicted,,NP_17115_NT_3_ZSCAN2g1_ON_S132_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0,0,8093,2989,52871,0,0
+11,ZSCAN2g1 OT1,,NP_17115_Z1_OT1d3_1_ZSCAN2g1_OT1_S1080_R1_001.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT1d3_1,dRNA,0,0,6685,15597,5631,0,0
+11,ZSCAN2g1 OT1,,NP_17115_Z1_OT1d3_2_ZSCAN2g1_OT1_S686_pear.fastq.assembled.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT1d3_2,dRNA,0,0.014258555,10,1846,21040,0,3
+11,ZSCAN2g1 OT1,,NP_17115_Z1_OT1d3_3_ZSCAN2g1_OT1_S687_pear.fastq.assembled.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT1d3_3,dRNA,0,0.017135024,2,793,5836,0,1
+11,ZSCAN2g1 OT1,,NP_17115_NT_1_ZSCAN2g1_OT1_S688_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0,0.016456391,5,1407,18230,0,3
+11,ZSCAN2g1 OT1,,NP_17115_NT_2_ZSCAN2g1_OT1_S689_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0,0.01384083,1,891,7225,0,1
+11,ZSCAN2g1 OT1,,NP_17115_NT_3_ZSCAN2g1_OT1_S690_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0,0.036973133,9,1064,8114,0,3
+11,ZSCAN2g1 OT1 predicted,,NP_17115_Z1_OT1d3_1_ZSCAN2g1_OT1_S1080_R1_001.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT1d3_1,dRNA,0,0.017367141,6685,15470,5758,0,1
+11,ZSCAN2g1 OT1 predicted,,NP_17115_Z1_OT1d3_2_ZSCAN2g1_OT1_S686_pear.fastq.assembled.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT1d3_2,dRNA,0.009479122,0.018958244,10,1787,21099,2,4
+11,ZSCAN2g1 OT1 predicted,,NP_17115_Z1_OT1d3_3_ZSCAN2g1_OT1_S687_pear.fastq.assembled.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT1d3_3,dRNA,0.017094017,0.017094017,2,779,5850,1,1
+11,ZSCAN2g1 OT1 predicted,,NP_17115_NT_1_ZSCAN2g1_OT1_S688_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0.01646723,0.021956307,5,1419,18218,3,4
+11,ZSCAN2g1 OT1 predicted,,NP_17115_NT_2_ZSCAN2g1_OT1_S689_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0,0,1,836,7280,0,0
+11,ZSCAN2g1 OT1 predicted,,NP_17115_NT_3_ZSCAN2g1_OT1_S690_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0.012316788,0.012316788,9,1059,8119,1,1
+12,ZSCAN2g1 ON,,NP_17115_Z1_OT2d1s_1_ZSCAN2g1_ON_S127_R1_001.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT2d1s_1,dRNA,0.001255871,0.001255871,11412,2904,79626,1,1
+12,ZSCAN2g1 ON,,NP_17115_Z1_OT2d1s_2_ZSCAN2g1_ON_S128_R1_001.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT2d1s_2,dRNA,0,0.000916128,15549,4358,109155,0,1
+12,ZSCAN2g1 ON,,NP_17115_Z1_OT2d1s_3_ZSCAN2g1_ON_S129_R1_001.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT2d1s_3,dRNA,0,0,1325,444,8360,0,0
+12,ZSCAN2g1 ON,,NP_17115_NT_1_ZSCAN2g1_ON_S130_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0,0.00299931,9438,2668,66682,0,2
+12,ZSCAN2g1 ON,,NP_17115_NT_2_ZSCAN2g1_ON_S131_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0.001161305,0.003483916,12243,3303,86110,1,3
+12,ZSCAN2g1 ON,,NP_17115_NT_3_ZSCAN2g1_ON_S132_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0,0,8093,2872,52988,0,0
+12,ZSCAN2g1 ON predicted,,NP_17115_Z1_OT2d1s_1_ZSCAN2g1_ON_S127_R1_001.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT2d1s_1,dRNA,0.001255871,0.001255871,11412,2904,79626,1,1
+12,ZSCAN2g1 ON predicted,,NP_17115_Z1_OT2d1s_2_ZSCAN2g1_ON_S128_R1_001.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT2d1s_2,dRNA,0,0.000916128,15549,4358,109155,0,1
+12,ZSCAN2g1 ON predicted,,NP_17115_Z1_OT2d1s_3_ZSCAN2g1_ON_S129_R1_001.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT2d1s_3,dRNA,0,0,1325,444,8360,0,0
+12,ZSCAN2g1 ON predicted,,NP_17115_NT_1_ZSCAN2g1_ON_S130_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0,0.00299931,9438,2668,66682,0,2
+12,ZSCAN2g1 ON predicted,,NP_17115_NT_2_ZSCAN2g1_ON_S131_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0.001161305,0.003483916,12243,3303,86110,1,3
+12,ZSCAN2g1 ON predicted,,NP_17115_NT_3_ZSCAN2g1_ON_S132_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0,0,8093,2872,52988,0,0
+12,ZSCAN2g1 OT2,,NP_17115_Z1_OT2d1s_1_ZSCAN2g1_OT2_S733_pear.fastq.assembled.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT2d1s_1,dRNA,0,0.002524806,8,6036,79214,0,2
+12,ZSCAN2g1 OT2,,NP_17115_Z1_OT2d1s_2_ZSCAN2g1_OT2_S734_pear.fastq.assembled.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT2d1s_2,dRNA,0.001435214,0.005740858,6,5382,69676,1,4
+12,ZSCAN2g1 OT2,,NP_17115_Z1_OT2d1s_3_ZSCAN2g1_OT2_S735_pear.fastq.assembled.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT2d1s_3,dRNA,0.001587755,0.00317551,4,4966,62982,1,2
+12,ZSCAN2g1 OT2,,NP_17115_NT_1_ZSCAN2g1_OT2_S736_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0,0,5,8060,84758,0,0
+12,ZSCAN2g1 OT2,,NP_17115_NT_2_ZSCAN2g1_OT2_S737_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0,0.007893158,10,4484,63346,0,5
+12,ZSCAN2g1 OT2,,NP_17115_NT_3_ZSCAN2g1_OT2_S738_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0,0.004484104,4,3205,44602,0,2
+12,ZSCAN2g1 OT2 predicted,,NP_17115_Z1_OT2d1s_1_ZSCAN2g1_OT2_S733_pear.fastq.assembled.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT2d1s_1,dRNA,0,0.002524806,8,6036,79214,0,2
+12,ZSCAN2g1 OT2 predicted,,NP_17115_Z1_OT2d1s_2_ZSCAN2g1_OT2_S734_pear.fastq.assembled.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT2d1s_2,dRNA,0.001435214,0.005740858,6,5382,69676,1,4
+12,ZSCAN2g1 OT2 predicted,,NP_17115_Z1_OT2d1s_3_ZSCAN2g1_OT2_S735_pear.fastq.assembled.fastqwtf-difflib_indels.csv,ZSCAN2g1_OT2d1s_3,dRNA,0.001587755,0.00317551,4,4966,62982,1,2
+12,ZSCAN2g1 OT2 predicted,,NP_17115_NT_1_ZSCAN2g1_OT2_S736_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_1,NT,0,0,5,8060,84758,0,0
+12,ZSCAN2g1 OT2 predicted,,NP_17115_NT_2_ZSCAN2g1_OT2_S737_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_2,NT,0,0.007893158,10,4484,63346,0,5
+12,ZSCAN2g1 OT2 predicted,,NP_17115_NT_3_ZSCAN2g1_OT2_S738_pear.fastq.assembled.fastqwtf-difflib_indels.csv,NT_3,NT,0,0.004484104,4,3205,44602,0,2
+13,VEGFAg3 ON,,NP_180411_V3_d2_only_1_VEGFg3_ON_S904_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_1,dRNA,0.012178149,0.01565762,51023,2016,57480,7,9
+13,VEGFAg3 ON,,NP_180411_V3_d2_only_2_VEGFg3_ON_S905_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_2,dRNA,0.008345504,0.011127338,59337,2511,71895,6,8
+13,VEGFAg3 ON,,NP_180411_V3_d2_only_3_VEGFg3_ON_S906_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_3,dRNA,0.040782159,0.042928588,36585,1599,46589,19,20
+13,VEGFAg3 ON,,NP_180411_NT_1_VEGFg3_ON_S916_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.021991034,0.02537427,47756,2325,59115,13,15
+13,VEGFAg3 ON,,NP_180411_NT_2_VEGFg3_ON_S917_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0.010469012,0.012562814,40365,1775,47760,5,6
+13,VEGFAg3 ON,,NP_180411_NT_3_VEGFg3_ON_S918_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0.012949773,0.014799741,49618,1975,54055,7,8
+13,VEGFAg3 ON,,NP_180320_V3_d2_only_1_VEGFg3_ON_S786_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_1,dRNA,0.026874496,0.044790827,30979,593,11163,3,5
+13,VEGFAg3 ON,,NP_180320_V3_d2_only_2_VEGFg3_ON_S787_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_2,dRNA,0.042220815,0.042220815,28174,518,9474,4,4
+13,VEGFAg3 ON,,NP_180320_V3_d2_only_3_VEGFg3_ON_S788_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_3,dRNA,0.032325845,0.032325845,36828,630,12374,4,4
+13,VEGFAg3 ON,,NP_180320_NT_1_VEGFg3_ON_S780_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0,0,12274,203,4568,0,0
+13,VEGFAg3 ON,,NP_180320_NT_2_VEGFg3_ON_S781_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0,0.019829467,14192,280,5043,0,1
+13,VEGFAg3 ON,,NP_180320_NT_3_VEGFg3_ON_S782_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0,0,10981,276,4622,0,0
+13,VEGFAg3 ON,,NP_180228_V3_d2_only_1_VEGFg3_ON_S766_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_1,dRNA,0.929772502,0.929772502,694,578,15165,141,141
+13,VEGFAg3 ON,,NP_180228_V3_d2_only_2_VEGFg3_ON_S767_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_2,dRNA,0.52542877,0.52542877,949,739,20174,106,106
+13,VEGFAg3 ON,,NP_180228_V3_d2_only_3_VEGFg3_ON_S749_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_3,dRNA,0.571264608,0.576481636,2748,1075,38336,219,221
+13,VEGFAg3 ON,,NP_180228_NT_24h_1_VEGFg3_ON_S763_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.22866943,0.22866943,330,309,6997,16,16
+13,VEGFAg3 ON,,NP_180228_NT_24h_2_VEGFg3_ON_S764_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,1.001251564,1.001251564,431,360,9588,96,96
+13,VEGFAg3 ON,,NP_180228_NT_24h_3_VEGFg3_ON_S765_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0.555609709,0.555609709,1005,766,20518,114,114
+13,VEGFAg3 ON predicted,,NP_180411_V3_d2_only_1_VEGFg3_OT2_S922_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_1,dRNA,0.074183976,0.074183976,68703,1987,5392,4,4
+13,VEGFAg3 ON predicted,,NP_180411_V3_d2_only_2_VEGFg3_OT2_S923_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_2,dRNA,0.128794848,0.128794848,66703,1915,5435,7,7
+13,VEGFAg3 ON predicted,,NP_180411_V3_d2_only_3_VEGFg3_OT2_S924_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_3,dRNA,0.138067061,0.138067061,67512,2103,5070,7,7
+13,VEGFAg3 ON predicted,,NP_180411_NT_1_VEGFg3_OT2_S928_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.144555092,0.144555092,77013,2499,6226,9,9
+13,VEGFAg3 ON predicted,,NP_180411_NT_2_VEGFg3_OT2_S929_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0.188288458,0.207117304,63820,1929,5311,10,11
+13,VEGFAg3 ON predicted,,NP_180411_NT_3_VEGFg3_OT2_S930_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0.201354567,0.201354567,70095,2132,5463,11,11
+13,VEGFAg3 ON predicted,,NP_180320_V3_d2_only_1_VEGFg3_OT2_S937_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_1,dRNA,0.32245827,0.32245827,70463,2325,5272,17,17
+13,VEGFAg3 ON predicted,,NP_180320_V3_d2_only_2_VEGFg3_OT2_S938_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_2,dRNA,0.435219284,0.435219284,74537,2791,5974,26,26
+13,VEGFAg3 ON predicted,,NP_180320_V3_d2_only_3_VEGFg3_OT2_S939_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_3,dRNA,0.32032032,0.32032032,62741,2602,4995,16,16
+13,VEGFAg3 ON predicted,,NP_180320_NT_1_VEGFg3_OT2_S931_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.161290323,0.161290323,75373,2637,6200,10,10
+13,VEGFAg3 ON predicted,,NP_180320_NT_2_VEGFg3_OT2_S932_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0.108283703,0.108283703,79883,2715,7388,8,8
+13,VEGFAg3 ON predicted,,NP_180320_NT_3_VEGFg3_OT2_S933_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0.117845118,0.117845118,71035,2337,5940,7,7
+13,VEGFAg3 ON predicted,,NP_180228_V3_d2_only_1_VEGFg3_ON_S766_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_1,dRNA,0.312167906,0.312167906,694,687,15056,47,47
+13,VEGFAg3 ON predicted,,NP_180228_V3_d2_only_2_VEGFg3_ON_S767_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_2,dRNA,0.219736316,0.219736316,949,889,20024,44,44
+13,VEGFAg3 ON predicted,,NP_180228_V3_d2_only_3_VEGFg3_ON_S768_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_3,dRNA,0.250234595,0.252841205,2748,1047,38364,96,97
+13,VEGFAg3 ON predicted,,NP_180228_NT_24h_1_VEGFg3_ON_S763_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.172488141,0.172488141,330,349,6957,12,12
+13,VEGFAg3 ON predicted,,NP_180228_NT_24h_2_VEGFg3_ON_S764_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0.314498375,0.314498375,431,409,9539,30,30
+13,VEGFAg3 ON predicted,,NP_180228_NT_24h_3_VEGFg3_ON_S765_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0.2396674,0.2396674,1005,839,20445,49,49
+13,VEGFAg3 OT2,,NP_180411_V3_d2_only_1_VEGFg3_OT2_S922_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_1,dRNA,0.110946746,0.110946746,68703,1971,5408,6,6
+13,VEGFAg3 OT2,,NP_180411_V3_d2_only_2_VEGFg3_OT2_S923_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_2,dRNA,0.164956012,0.164956012,66703,1894,5456,9,9
+13,VEGFAg3 OT2,,NP_180411_V3_d2_only_3_VEGFg3_OT2_S924_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_3,dRNA,0.137416569,0.157047507,67512,2079,5094,7,8
+13,VEGFAg3 OT2,,NP_180411_NT_1_VEGFg3_OT2_S928_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.128184586,0.128184586,77013,2484,6241,8,8
+13,VEGFAg3 OT2,,NP_180411_NT_2_VEGFg3_OT2_S929_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0.169172932,0.187969925,63820,1920,5320,9,10
+13,VEGFAg3 OT2,,NP_180411_NT_3_VEGFg3_OT2_S930_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0.200913242,0.200913242,70095,2120,5475,11,11
+13,VEGFAg3 OT2,,NP_180320_V3_d2_only_1_VEGFg3_OT2_S937_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_1,dRNA,0.283179158,0.283179158,70463,2300,5297,15,15
+13,VEGFAg3 OT2,,NP_180320_V3_d2_only_2_VEGFg3_OT2_S938_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_2,dRNA,0.433550108,0.466900117,74537,2768,5997,26,28
+13,VEGFAg3 OT2,,NP_180320_V3_d2_only_3_VEGFg3_OT2_S939_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_3,dRNA,0.37962038,0.37962038,62741,2592,5005,19,19
+13,VEGFAg3 OT2,,NP_180320_NT_1_VEGFg3_OT2_S931_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.176706827,0.176706827,75373,2612,6225,11,11
+13,VEGFAg3 OT2,,NP_180320_NT_2_VEGFg3_OT2_S932_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0.134952767,0.16194332,79883,2693,7410,10,12
+13,VEGFAg3 OT2,,NP_180320_NT_3_VEGFg3_OT2_S933_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0.117311882,0.117311882,71035,2310,5967,7,7
+13,VEGFAg3 OT2,,NP_180228_V3_d2_only_1_VEGFg3_OT2_S790_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_1,dRNA,0.136315194,0.143750568,43162,25782,121043,165,174
+13,VEGFAg3 OT2,,NP_180228_V3_d2_only_2_VEGFg3_OT2_S791_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_2,dRNA,0.080289867,0.088524725,39150,22743,97148,78,86
+13,VEGFAg3 OT2,,NP_180228_V3_d2_only_3_VEGFg3_OT2_S792_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_3,dRNA,0.168387005,0.177900395,39208,23991,105115,177,187
+13,VEGFAg3 OT2,,NP_180228_NT_24h_1_VEGFg3_OT2_S787_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.079121147,0.081149894,36418,23750,98583,78,80
+13,VEGFAg3 OT2,,NP_180228_NT_24h_2_VEGFg3_OT2_S788_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0.070450796,0.073126143,43285,25981,112135,79,82
+13,VEGFAg3 OT2,,NP_180228_NT_24h_3_VEGFg3_OT2_S789_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0.094633973,0.101192763,39043,25733,106727,101,108
+13,VEGFAg3 OT2 predicted,,NP_180411_V3_d2_only_1_VEGFg3_OT2_S922_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_1,dRNA,0.074183976,0.074183976,68703,1987,5392,4,4
+13,VEGFAg3 OT2 predicted,,NP_180411_V3_d2_only_2_VEGFg3_OT2_S923_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_2,dRNA,0.128794848,0.128794848,66703,1915,5435,7,7
+13,VEGFAg3 OT2 predicted,,NP_180411_V3_d2_only_3_VEGFg3_OT2_S924_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_3,dRNA,0.138067061,0.138067061,67512,2103,5070,7,7
+13,VEGFAg3 OT2 predicted,,NP_180411_NT_1_VEGFg3_OT2_S928_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.144555092,0.144555092,77013,2499,6226,9,9
+13,VEGFAg3 OT2 predicted,,NP_180411_NT_2_VEGFg3_OT2_S929_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0.188288458,0.207117304,63820,1929,5311,10,11
+13,VEGFAg3 OT2 predicted,,NP_180411_NT_3_VEGFg3_OT2_S930_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0.201354567,0.201354567,70095,2132,5463,11,11
+13,VEGFAg3 OT2 predicted,,NP_180320_V3_d2_only_1_VEGFg3_OT2_S937_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_1,dRNA,0.32245827,0.32245827,70463,2325,5272,17,17
+13,VEGFAg3 OT2 predicted,,NP_180320_V3_d2_only_2_VEGFg3_OT2_S938_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_2,dRNA,0.435219284,0.435219284,74537,2791,5974,26,26
+13,VEGFAg3 OT2 predicted,,NP_180320_V3_d2_only_3_VEGFg3_OT2_S939_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_3,dRNA,0.32032032,0.32032032,62741,2602,4995,16,16
+13,VEGFAg3 OT2 predicted,,NP_180320_NT_1_VEGFg3_OT2_S931_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.161290323,0.161290323,75373,2637,6200,10,10
+13,VEGFAg3 OT2 predicted,,NP_180320_NT_2_VEGFg3_OT2_S932_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0.108283703,0.108283703,79883,2715,7388,8,8
+13,VEGFAg3 OT2 predicted,,NP_180320_NT_3_VEGFg3_OT2_S933_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0.117845118,0.117845118,71035,2337,5940,7,7
+13,VEGFAg3 OT2 predicted,,NP_180228_V3_d2_only_1_VEGFg3_OT2_S790_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_1,dRNA,0.125888258,0.132513955,43162,26083,120742,152,160
+13,VEGFAg3 OT2 predicted,,NP_180228_V3_d2_only_2_VEGFg3_OT2_S791_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_2,dRNA,0.082607932,0.08570573,39150,23048,96843,80,83
+13,VEGFAg3 OT2 predicted,,NP_180228_V3_d2_only_3_VEGFg3_OT2_S792_R1_001.fastqwtf-difflib_indels.csv,VEGFAg3_OT2d2_3,dRNA,0.16598777,0.173619392,39208,24279,104827,174,182
+13,VEGFAg3 OT2 predicted,,NP_180228_NT_24h_1_VEGFg3_OT2_S787_R1_001.fastqwtf-difflib_indels.csv,NT_1,NT,0.073228779,0.075262912,36418,24011,98322,72,74
+13,VEGFAg3 OT2 predicted,,NP_180228_NT_24h_2_VEGFg3_OT2_S788_R1_001.fastqwtf-difflib_indels.csv,NT_2,NT,0.065319124,0.067108689,43285,26357,111759,73,75
+13,VEGFAg3 OT2 predicted,,NP_180228_NT_24h_3_VEGFg3_OT2_S789_R1_001.fastqwtf-difflib_indels.csv,NT_3,NT,0.080804285,0.086441793,39043,26030,106430,86,92
