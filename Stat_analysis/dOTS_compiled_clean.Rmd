@@ -48,9 +48,13 @@ library(ggbeeswarm)
 if (!require(patchwork)) install.packages('patchwork')
 library(patchwork)
 
-# magick for drawing images
+## magick for drawing images
 if (!require(magick)) install.packages('magick')
 library(magick)
+
+## openxlsx for making source data file
+if (!require(openxlsx)) install.packages('openxlsx')
+library(openxlsx)
 
 ## Create directories for figures, tables, etc.
 dir.create(path = "./Main_figures")
@@ -227,6 +231,44 @@ round_max <- function(x){
   return(roundmax)
 }
 
+## grouped split function for generating source data file
+named_group_split <- function(.tbl, ...) {
+  grouped <- group_by(.tbl, ...)
+  names <- rlang::eval_bare(rlang::expr(paste(!!!group_keys(grouped), sep = " / ")))
+
+  grouped %>% 
+    group_split(keep = FALSE) %>% 
+    rlang::set_names(names)
+}
+
+## function to create source data file for a figure with indel data
+indel_source <- function(.tbl, ...){
+  group_by(.tbl, Experiment) %>%
+  mutate(target2 = if_else(str_detect(target, "OT") == TRUE,
+                          "OT", "ON")) %>%
+  ungroup() %>%
+  select(Panel, Name, guide, X_lab, Indel_stringent, target, target2) %>%
+  pivot_wider(names_from = target2,
+              values_from = c(Indel_stringent, target)) %>%
+  arrange(Panel, Name) %>%
+  select(Panel, Name, guide, target_OT, X_lab, Indel_stringent_ON, Indel_stringent_OT) %>%
+  rename("Indels ON" = Indel_stringent_ON,
+         "Indels OT" = Indel_stringent_OT,
+         "Off-target" = target_OT,
+         "X label" = X_lab,
+         "Guide" = guide)
+}
+
+## function to create source data file for a figure with ratio data
+ratio_source <- function(.tbl, ...){
+  arrange(.tbl, Panel, Name) %>%
+  select(Panel, Name, guide, location_OT, X_lab, ratio) %>%
+  rename("Off-target" = location_OT,
+         "X label" = X_lab,
+         "Guide" = guide,
+         "Ratio" = ratio)
+}
+
 ```
 
 # dRNA screens for all tested sites
@@ -237,9 +279,10 @@ This section analyzes first pass dRNA screening experiments for 19 on-off target
 ## read dRNA screen .csv file into memory
 dRNA_screens <- read_csv("Data/dRNA_screens.csv") %>%
   ## grab guide name
-  mutate(Site = gsub("g", " sgRNA", Site),
-         guide = word(Site, start = 1L, end = 2L),
-         target = word(Site, start = 3L)) %>%
+  mutate(guide = word(Site, start = 1),
+         Site = gsub("g", " sgRNA", Site),
+         guide = gsub("g", " sgRNA", guide),
+         target = word(Site, start = -1)) %>%
   ## filter out m4d1 from all samples
   filter(X_lab != "+ + m4d1")
 
@@ -252,6 +295,7 @@ clean_screens <- dRNA_screens %>%
          ## filter out samples that failed QC
          !grepl("^R0[0-9]_d[5-6]", Sample) &
          !grepl("^NP_JR_062517_R01_d6", Sample) &
+         !grepl("^NP_JR_062517_R04_d6", Sample) &
          !grepl("^VEGFAg3_OT18d1", Name) &
          !grepl("^VEGFAg2_OT2d1", Name) &
          !grepl("^VEGFAg2_OT2d5", Name) &
@@ -319,6 +363,22 @@ ggsave("Stat_analysis/Supp_figures/FigS3_dRNA_screen.pdf", plot = fig_s3,
        height = 30, width = 24, units = "in",
        limitsize = FALSE)
 
+## make Fig. S3 data frame for source data file
+fig_s3_source <- clean_screens %>%
+  group_by(Experiment) %>%
+  mutate(Panel = letters[Experiment]) %>%
+  ungroup() %>%
+  indel_source()
+
+## split by panel
+fig_s3_list <- fig_s3_source %>%
+  named_group_split(Panel)
+
+## change names to figure panels
+names(fig_s3_list) <- paste0("FigS3", names(fig_s3_list))
+
+## create and add to source list
+source_data_list <- fig_s3_list
 
 # ===========================================================================================
 
@@ -381,6 +441,24 @@ fig_s1b2 <- ggplot(data = fancf_screen_ratio,
   labs(y = "On-target/Off-target\nindel frequency ratio") +
   ggtitle(paste0(unique(fancf_screen_ratio$guide), " ",
                  unique(fancf_screen_ratio$location_OT)))
+
+## make Fig. S1b data frame for source data file
+fig_s1b1_source <- fancf_screen %>%
+  group_by(Experiment) %>%
+  mutate(Panel = "b") %>%
+  ungroup() %>%
+  indel_source()
+
+fig_s1b2_source <- fancf_screen_ratio %>%
+  mutate(Panel = "b") %>%
+  ratio_source()
+
+fig_s1b_source <- left_join(fig_s1b1_source, fig_s1b2_source)
+
+## append to source data list
+source_data_list <- append(source_data_list,
+                           list("FigS1b" = fig_s1b_source))
+ 
 # ===========================================================================================
 
 ## make normalized ratio table and plot
@@ -409,17 +487,21 @@ norm_ratio <- dRNA_screens %>%
          sem_ON_ratio = (avg_ON / first(avg_ON) *
                            sqrt((sem_ON / avg_ON)^2 +
                                   (first(sem_ON) / first(avg_ON))^2)),
-         OT_ratio = avg_OT / first(avg_OT))
+         OT_ratio = avg_OT / first(avg_OT),
+         test_norm_ratio = ratio / first(avg),
+         test_on_ratio = Indel_stringent_ON / first(avg_ON),
+         test_ot_ratio = Indel_stringent_OT / first(avg_OT))
 
-dRNA_count <- norm_ratio %>%
+## count median dRNAs tested per site
+median_dRNA <- norm_ratio %>%
   filter(X_lab != "- - -" &
          X_lab != "+ + -" &
          !is.na(location_OT)) %>%
   ungroup() %>%
   group_by(guide, location_OT) %>%
-  summarise(count = n_distinct(X_lab))
-
-median_dRNA <- median(dRNA_count$count)
+  summarise(count = n_distinct(X_lab)) %>%
+  ungroup() %>%
+  summarise(median(count))
 
 ## create table, filter
 norm_table <- norm_ratio %>%
@@ -429,15 +511,11 @@ norm_table <- norm_ratio %>%
   filter(norm_ratio == max(norm_ratio)) %>% 
   ## filter out ratio < 2
   filter(norm_ratio > 2) %>%
-  select(Experiment, guide, location_OT, X_lab, n_ON, norm_ratio,
-         ON_ratio, OT_ratio, sem_norm_ratio, sem_ON_ratio) %>%
-  rename(best_dRNA = X_lab) %>%
+  mutate(best_dRNA = X_lab) %>%
   unite(Site, guide, location_OT, sep = " ") %>%
   ## grouping for facet plot in 1c
   mutate(group = 1,
          best_dRNA = gsub("\\+ \\+ ", "", best_dRNA)) %>%
-  ## unique and remove NA
-  unique() %>%
   ## arrange in descending order
   arrange(desc(norm_ratio))
 
@@ -445,26 +523,45 @@ norm_table <- norm_ratio %>%
 norm_table_2 <- norm_ratio %>%
   unite(Site, guide, location_OT, sep = " ") %>%
   ## remove only missing experiemnt
-  filter(!Site %in% norm_table$Site)  %>%
-  select(Experiment, Site, X_lab, n_ON, norm_ratio,
-         ON_ratio, OT_ratio, sem_norm_ratio, sem_ON_ratio) %>%
-  rename(best_dRNA = X_lab) %>%
+  filter(!Site %in% norm_table$Site) %>%
+  mutate(best_dRNA = X_lab) %>%
   ## filter max norm ratio for missing sites
   filter(norm_ratio == max(norm_ratio)) %>%
   ## groups on whether ON editing is < 0.5 or not
   mutate(group = ifelse(ON_ratio < 0.5, 2, 3),
          best_dRNA = gsub("\\+ \\+ ", "", best_dRNA)) %>%
-  unique() %>%
   group_by(Site) %>%
   ## if more than one experiment for same site, select max
   filter(norm_ratio == max(norm_ratio)) %>%
   arrange(desc(norm_ratio)) # arrange top to bottom
 
+## create source file for fig 1c 
+fig_1c_source <- full_join(norm_table, norm_table_2) %>%
+  mutate(Panel = "c") %>%
+  ungroup() %>%
+  separate(col = Site, into = c("guide", "location"), sep = " (?=[^ ]+$)") %>%
+  select(Panel, Name, guide, location, ratio, test_norm_ratio, Indel_stringent_ON,
+         test_on_ratio, Indel_stringent_OT, test_ot_ratio) %>%
+  rename("Guide" = guide,
+         "Off-target" = location,
+         "ON:OT ratio" = ratio,
+         "Normalized ON:OT ratio" = test_norm_ratio,
+         "Indels ON" = Indel_stringent_ON,
+         "Normalized ON ratio" = test_on_ratio,
+         "Indels OT" = Indel_stringent_OT,
+         "Normalized OT ratio" = test_ot_ratio)
+
+## append to source data list
+source_data_list <- append(source_data_list, list("Fig1c" = fig_1c_source))
+
 ## join tables together 
 norm_table_2 <- full_join(norm_table, norm_table_2) %>%
   ungroup() %>%
+  select(Experiment, Site, X_lab, n_ON, norm_ratio,
+         ON_ratio, OT_ratio, sem_norm_ratio, sem_ON_ratio, group) %>%
   select(-c(Experiment)) %>%
-  rename(n = n_ON)
+  rename(n = n_ON) %>%
+  unique()
 
 ## create Figure 1c - normalized ratio plot with sem
 fig_1c <- ggplot(data = norm_table_2, aes(x = fct_inorder(Site), y = norm_ratio, fill = factor(group))) +
@@ -602,7 +699,7 @@ ggsave("Stat_analysis/Main_figures/Fig2_mechanism.pdf", fig_2,
 # ===========================================================================================
 
 ## plot pre-incubation in vitro data - on target
-fig_s7b <- ggplot(iv2_on_pre, aes(fct_inorder(X_lab), uncut)) +
+fig_s8b <- ggplot(iv2_on_pre, aes(fct_inorder(X_lab), uncut)) +
   geom_beeswarm(cex = 1.2, fill = pal[1], size = 2.5, pch = 21, alpha = 0.7) +
   stat_summary(data = iv2_on_pre, fun = "mean",
                geom = "point", pch = "_", size = 8,
@@ -616,7 +713,7 @@ fig_s7b <- ggplot(iv2_on_pre, aes(fct_inorder(X_lab), uncut)) +
   ggtitle("FANCF sgRNA2 on-target")
 
 ## plot pre-incubation in vitro data - off target
-fig_s7a <- ggplot(iv2_ot_pre, aes(fct_inorder(X_lab), uncut)) +
+fig_s8a <- ggplot(iv2_ot_pre, aes(fct_inorder(X_lab), uncut)) +
   geom_beeswarm(cex = 1.2, fill = pal[2], size = 2.5, pch = 21, alpha = 0.7) +
   stat_summary(data = iv2_ot_pre, fun = "mean",
                geom = "point", pch = "_", size = 8,
@@ -630,42 +727,101 @@ fig_s7a <- ggplot(iv2_ot_pre, aes(fct_inorder(X_lab), uncut)) +
   ggtitle("FANCF sgRNA2 off-target")
 
 ## bring in annotated gel image for panel a 
-fig_s7a_gel <- ggdraw() +
+fig_s8a_gel <- ggdraw() +
   ggtitle("a") +
   theme_cowplot() + 
   theme(plot.title = element_text(size = 36, hjust = 0),
         axis.line = element_blank()) +
-  draw_image(magick::image_read_pdf("Images/figs6a_off.pdf", density = 600))
+  draw_image(magick::image_read_pdf("Images/figs8a_off.pdf", density = 600))
 
 ## bring in annotated gel image for panel b 
-fig_s7b_gel <- ggdraw() +
+fig_s8b_gel <- ggdraw() +
   ggtitle("b") +
   theme_cowplot() + 
   theme(plot.title = element_text(size = 36, hjust = 0),
         axis.line = element_blank()) +
-  draw_image(magick::image_read_pdf("Images/figs6b_on.pdf", density = 600))
+  draw_image(magick::image_read_pdf("Images/figs8b_on.pdf", density = 600))
 
-## make fig s6 labels
-fig_s7_label <- label_plot(data = iv2_on_pre,
+## make fig s8 labels
+fig_s8_label <- label_plot(data = iv2_on_pre,
                            aes(x = Site,
                                y = uncut)) +
   geom_point(color = "NA") +
   scale_x_discrete(labels = "\ndRNA-RNP (fmoles)\n\nsgRNA-RNP (fmoles)\n\npreincubation")
 
-## plot layout for figure s7 - preincubation in vitro data
-fig_s7 <- fig_s7a_gel + fig_s7_label + plot_spacer() + fig_s7a + 
-  fig_s7b_gel + fig_s7_label + plot_spacer() + fig_s7b + 
+## plot layout for figure s8 - preincubation in vitro data
+fig_s8 <- fig_s8a_gel + fig_s8_label + plot_spacer() + fig_s8a + 
+  fig_s8b_gel + fig_s8_label + plot_spacer() + fig_s8b + 
   plot_layout(ncol = 4, widths = c(1, 0.05, 0.15, 1)) &
   theme(plot.margin = margin(t = 7, r = 7, b = 30, l = 7))
 
-## save figure s7 - preincubation of dRNA or sgRNA
-ggsave("Stat_analysis/Supp_figures/FigS7_preincubation.pdf", fig_s7,
+## save figure s8 - preincubation of dRNA or sgRNA
+ggsave("Stat_analysis/Supp_figures/FigS8_preincubation.pdf", fig_s8,
        height = 12, width = 8)
+
+## create source file for fig 2b
+fig_2b_source <- iv2_on %>%
+  ungroup() %>%
+  mutate(Panel = "b",
+         Site = gsub("g", " sgRNA ", Site)) %>%
+  rename("Replicate" = Exp,
+         "Fraction uncut" = uncut,
+         "Uncut DNA" = Peak_1,
+         "Cut DNA 1" = Peak_2,
+         "Cut DNA 2" = Peak_3) %>%
+  select(Panel, Lane, everything()) %>%
+  select(-X_lab)
+
+## create source file for fig 2a
+fig_2a_source <- iv2_ot %>%
+  ungroup() %>%
+  mutate(Panel = "a", 
+         Site = gsub("g", " sgRNA ", Site)) %>%
+  rename("Replicate" = Exp,
+         "Fraction uncut" = uncut,
+         "Uncut DNA" = Peak_1,
+         "Cut DNA 1" = Peak_2,
+         "Cut DNA 2" = Peak_3) %>%
+  select(Panel, Lane, everything()) %>%
+  select(-X_lab)
+
+## create source file for fig S8b
+fig_s8b_source <- iv2_on_pre %>%
+  ungroup() %>%
+  mutate(Panel = "b", 
+         Site = gsub("g", " sgRNA ", Site)) %>%
+  rename("Replicate" = Exp,
+         "Fraction uncut" = uncut,
+         "Uncut DNA" = Peak_1,
+         "Cut DNA 1" = Peak_2,
+         "Cut DNA 2" = Peak_3,
+         "X label" = X_lab) %>%
+  select(Panel, Lane, Replicate, Site, "X label", everything())
+
+## create source file for fig S8a
+fig_s8a_source <- iv2_ot_pre %>%
+  ungroup() %>%
+  mutate(Panel = "a", 
+         Site = gsub("g", " sgRNA ", Site)) %>%
+  rename("Replicate" = Exp,
+         "Fraction uncut" = uncut,
+         "Uncut DNA" = Peak_1,
+         "Cut DNA 1" = Peak_2,
+         "Cut DNA 2" = Peak_3,
+         "X label" = X_lab) %>%
+  select(Panel, Lane, Replicate, Site, "X label", everything())
+
+## append to source data list
+source_data_list <- append(source_data_list,
+                           list("Fig2a - plot" = fig_2a_source,
+                                "Fig2b - plot" = fig_2b_source,
+                                "FigS8a - plot" = fig_s8a_source,
+                                "FigS8b - plot" = fig_s8b_source))
 ```
 
 ```{r ciCas9}
 ## read in csv file
-cicas9 <- read_csv("Datacicas9.csv") %>%
+cicas9 <- read_csv("Data/cicas9.csv") %>%
   filter(Time != 24 &
          Treated != "DMSO" &
          Reads_passing >= 1000) %>%
@@ -754,13 +910,33 @@ fig_3a2 <- ggplot(data = cicas9_fig_3_ot,
   guides(linetype = guide_legend(unit(2, "lines"), order = 1, label = FALSE),
          fill = guide_legend(order = 0))
 
+## create source file for fig 3a
+fig_3a_source <- cicas9 %>%
+  mutate(Panel = "a",
+         Guide = "FANCF sgRNA 2",
+         ot = "OT1") %>%
+  select(Site, Name, Replicate, Time, Indel_stringent, Panel, Guide, ot) %>%
+  pivot_wider(names_from = Site,
+              values_from = Indel_stringent) %>%
+  select(Panel, Name, Replicate, Guide, ot, "on-target", "off-target") %>%
+  rename("Indels ON" = "on-target",
+         "Indels OT" = "off-target",
+         "Off-target" = ot) 
+
+## append to source data list
+source_data_list <- append(source_data_list,
+                           list("Fig3a" = fig_3a_source))
+
 ```
 
 ```{r titrations}
-titrations_all <- read_csv("Datatitrations.csv") %>%
+titrations_all <- read_csv("Data/titrations.csv") %>%
   filter(Reads_passing >= 1000 &
            Experiment != 2) %>%
-  mutate(Site = gsub("g", " sgRNA", Site),
+  mutate(guide = word(Site, 1),
+         target = word(Site, -1),
+         Site = gsub("g", " sgRNA", Site),
+         guide = gsub("g", " sgRNA", guide),
          Experiment = as_factor(Experiment))
 
 titrations <- titrations_all %>%
@@ -842,25 +1018,55 @@ joined_titrations <- inner_join(titrations, titrations_ratio, by = "Experiment")
                 names_to = "plottype",
                 values_to = "plot")
 
-## arrange into plot s8 - additonal titrations
-fig_s8 <- wrap_plots(joined_titrations$plot, ncol = 3, widths = c(0.05, 1, 1)) &
+## arrange into plot s9 - additonal titrations
+fig_s9 <- wrap_plots(joined_titrations$plot, ncol = 3, widths = c(0.05, 1, 1)) &
   theme(plot.margin = margin(t = 7, r = 7, b = 20, l = 7, unit = "pt"))
 
-## save fig s8 - additional titrations
-ggsave("Stat_analysis/Supp_figures/FigS8_titrations.pdf", fig_s8,
+## save fig s9 - additional titrations
+ggsave("Stat_analysis/Supp_figures/FigS9_titrations.pdf", fig_s9,
        height = 16, width = 12)
+
+## create source file for fig s9
+fig_s9_indels_source <- titrations_all %>%
+  group_by(Experiment) %>%
+  mutate(Panel = letters[Experiment]) %>%
+  ungroup() %>%
+  indel_source()
+
+fig_s9_ratio_source <- titrations_all %>%
+  ratio_calc() %>%
+  group_by(Experiment) %>%
+  mutate(Panel = letters[Experiment]) %>%
+  ungroup() %>%
+  ratio_source()
+
+fig_s9_source <- left_join(fig_s9_indels_source, fig_s9_ratio_source)
+
+## split list by panel 
+fig_s9_list <- fig_s9_source %>%
+  named_group_split(Panel)
+
+## change names to figure panels
+names(fig_s9_list) <- paste0("FigS9", names(fig_s9_list))
+
+## append to source data list
+source_data_list <- append(source_data_list, fig_s9_list)
 
 # ===========================================================================================
 
 ## Import titration data for VEGFAg3 OT2
-v3_titration <- read_csv("Datatitrations.csv") %>%
+v3_titration <- read_csv("Data/titrations.csv") %>%
   filter(Reads_passing >= 1000 &
          Experiment == 2) %>%
-  mutate(Site = gsub("g", " sgRNA", Site))
+  mutate(target = word(Site, -1),
+         Site = gsub("g", " sgRNA", Site),
+         guide = word(Site, start = 1, end = 2),
+         Panel = "b")
 
 ## calculate ratio
 v3_titration_ratio <- ratio_calc(v3_titration) %>%
-  mutate(Site = paste0(guide, location_ON))
+  mutate(Site = paste0(guide, location_ON),
+         Panel = "b")
 
 ## Plot data
 fig_3b1 <- ggplot(data = v3_titration, aes(x = X_lab, y = Indel_stringent,
@@ -928,21 +1134,19 @@ fig_3 <- fig_3a_label + fig_3a1 + fig_3a2 +
 ggsave("Stat_analysis/Main_figures/Fig3_cicas9_and_titrations.pdf", fig_3, 
        height = 12, width = 12)
 
-# ===========================================================================================
+## create source file for fig 3b
+fig_3b_indels_source <- v3_titration %>%
+  indel_source()
 
-s7a <- rbind(titrations$plot, null_test)
-s7b <- rbind(titrations_ratio$plot, null_test)
+fig_3b_ratio_source <- v3_titration_ratio %>%
+  ratio_source()
 
-## Organize and align data for other titrated sites
-fig_s7a <- plot_grid(plotlist = s7a, align = "hv", ncol = 1, axis = "lb",
-                     labels = c("a", "", "b", "", "c", ""),
-                     rel_heights = c(1, 0.1, 1, 0.1, 1, 0.1))
-fig_s7b <- plot_grid(plotlist = s7b, align = "hv", ncol = 1, axis = "lb",
-                     rel_heights = c(1, 0.1, 1, 0.1, 1, 0.1))
+fig_3b_source <- left_join(fig_3b_indels_source, fig_3b_ratio_source)
 
-fig_s7 <- plot_grid(fig_s7a, fig_s7b, ncol = 2, align = "hv")
+## append to source data list
+source_data_list <- append(source_data_list,
+                           list("Fig3b" = fig_3b_source))
 
-save_plot("FigS7_titrations.pdf", fig_s7, ncol = 2, base_height = 12, base_aspect_ratio = 0.5)
 ```
 
 ```{r truncated guides}
@@ -956,7 +1160,10 @@ tru_vegfa <- dRNA_screens %>%
          ymax = ifelse(facet_group == 1, 20, 3),
          X_lab = str_replace(X_lab, "^[+]", "WT"),
          Site = gsub("truVEGFA ", "VEGFA tru-", Site),
-         X_lab = gsub("[0-9]", "+", X_lab))
+         X_lab = gsub("[0-9]", "+", X_lab),
+         guide = word(Site, start = 1, end = 2),
+         target = word(Site, -1),
+         Panel = "a")
 
 ## ratio calculations
 tru_vegfa_ratio <- ratio_calc(tru_vegfa)
@@ -1002,18 +1209,34 @@ fig_4a_labels <- label_plot(tru_vegfa, aes(x = as_factor(Experiment),
 
 fig_4a1_label <- fig_4a_labels +
   labs(title = "a")
+
+## create source file for fig 4a
+fig_4a_indels_source <- tru_vegfa %>%
+  indel_source()
+
+fig_4a_ratio_source <- tru_vegfa_ratio %>%
+  mutate(Panel = "a") %>%
+  ratio_source()
+
+fig_4a_source <- left_join(fig_4a_indels_source, fig_4a_ratio_source)
+
+## append to source data list
+source_data_list <- append(source_data_list,
+                           list("Fig4a" = fig_4a_source))
+
 ```
 
 ```{r hifi}
 ## read hifi .csv file into memory
-hifi <- read_csv("Datahifi_dots.csv") %>%
+hifi <- read_csv("Data/hifi_dots.csv") %>%
   filter(Reads_passing >= 1000 &
          !grepl("4", X_lab)) %>% # removes 4x dRNA concentrations
   mutate(Cas9 = factor(Cas9, levels = c("WT", "ECas9", "HF1", "Hypa")),
          Site = gsub("g", " sgRNA", Site),
          X_lab = gsub("[0-9]", "+", X_lab),
          X_lab = gsub("HF\\+", "HF1", X_lab),
-         guide = word(Site, start = 1, end = 2))
+         guide = word(Site, start = 1, end = 2),
+         target = word(Site, -1))
 
 ## filter data and create labels for plots
 V3_hifi <- hifi %>%
@@ -1021,7 +1244,8 @@ V3_hifi <- hifi %>%
   mutate(X_lab = gsub("\\s1", " 2", X_lab))
 
 F2_hifi <- hifi %>%
-  filter(Experiment == 1)
+  filter(Experiment == 1) %>%
+  mutate(Panel = "b")
 
 labels_V3_hifi <- V3_hifi %>%
   distinct(X_lab)
@@ -1039,7 +1263,8 @@ V3_hifi_ratio <- hifi_ratio %>%
   filter(Experiment == 2)
 
 F2_hifi_ratio <- hifi_ratio %>%
-  filter(Experiment == 1)
+  filter(Experiment == 1) %>%
+  mutate(Panel = "b")
 
 ratio_labels_V3_hifi <- labels_V3_hifi %>%
   filter(X_lab != "- - -")
@@ -1109,11 +1334,25 @@ fig_4 <- (fig_4a1_label + plot_spacer() + fig_4a1 +
 ggsave("Stat_analysis/Main_figures/Fig4_hifi.pdf", fig_4,
        height = 12, width = 18)
 
+## create source file for fig 4b
+fig_4b_source <- F2_hifi %>%
+  mutate("Off-target" = "OT1") %>%
+  select(Panel, Name, guide, "Off-target", Cas9, X_lab, Indel_stringent, target) %>%
+  pivot_wider(names_from = target,
+              values_from = Indel_stringent) %>%
+  mutate(Ratio = ifelse(X_lab == "- - -", NA, ON / OT1)) %>%
+  rename("Guide" = guide,
+         "Indels ON" = ON,
+         "Indels OT" = OT1)
+
+## append to source data list
+source_data_list <- append(source_data_list,
+                           list("Fig4b" = fig_4b_source))
 
 # ===========================================================================================
 
-## Figure S9 - additional site with hifi
-fig_s9a1 <- ggplot(data = V3_hifi,
+## Figure S10 - additional site with hifi
+fig_s10a1 <- ggplot(data = V3_hifi,
                    aes(factor(X_order), Indel_stringent, fill = Site)) +
   geom_beeswarm(cex = 3, size = 2.5, pch = 21, alpha = 0.7) +
   stat_summary(data = V3_hifi, fun = "mean",
@@ -1134,7 +1373,7 @@ fig_s9a1 <- ggplot(data = V3_hifi,
   ggtitle(unique(V3_hifi$Site)[2])
 
 ## additional hifi ratio
-fig_s9a2 <- ggplot(data = V3_hifi_ratio, aes(factor(X_order), ratio)) +
+fig_s10a2 <- ggplot(data = V3_hifi_ratio, aes(factor(X_order), ratio)) +
   geom_beeswarm(size = 2.5, cex = 3, pch = 21,
                 fill = pal[5], alpha = 0.7) +
   stat_summary(data = V3_hifi_ratio, fun = "mean",
@@ -1152,25 +1391,41 @@ fig_s9a2 <- ggplot(data = V3_hifi_ratio, aes(factor(X_order), ratio)) +
   ggtitle(paste0(unique(V3_hifi_ratio$guide), " ", unique(V3_hifi_ratio$location_OT), "\n"))
 
 ## make labels
-fig_s9_labels <- label_plot(V3_hifi, aes(x = as_factor(Experiment),
+fig_s10_labels <- label_plot(V3_hifi, aes(x = as_factor(Experiment),
                                           y = Indel_stringent)) +
   geom_point(color = NA) + 
   scale_x_discrete(label = label_grab(V3_hifi))
 
 ## align
-fig_s9 <- fig_s9_labels + fig_s9a1 + fig_s9_labels + fig_s9a2 +
+fig_s10 <- fig_s10_labels + fig_s10a1 + fig_s10_labels + fig_s10a2 +
   plot_layout(ncol = 2, widths = c(0.05, 1)) &
   theme(plot.margin = margin(t = 7, r = 7, b = 20, l = 7))
 
 ## save fig s9 - additional hifi
-ggsave("Stat_analysis/Supp_figures/FigS9_hifi_V3.pdf", fig_s9,
+ggsave("Stat_analysis/Supp_figures/FigS10_hifi_V3.pdf", fig_s10,
        height = 10, width = 8)
+
+## create source file for fig s10
+fig_s10_source <- V3_hifi %>%
+  mutate("Off-target" = "OT2") %>%
+  select(Name, guide, "Off-target", Cas9, X_lab, Indel_stringent, target) %>%
+  pivot_wider(names_from = target,
+              values_from = Indel_stringent) %>%
+  mutate(Ratio = ifelse(X_lab == "- - -", NA, ON / OT2)) %>%
+  rename("Guide" = guide,
+         "Indels ON" = ON,
+         "Indels OT" = OT2)
+
+## append to source data list
+source_data_list <- append(source_data_list,
+                           list("FigS10" = fig_s10_source))
 ```
 
 ```{r mdots}
 ## read mdots .csv file into memory
-mdots <- read_csv("Datamdots.csv") %>%
-  mutate(Site = gsub("g", " sgRNA", Site),
+mdots <- read_csv("Data/mdots.csv") %>%
+  mutate(target = word(Site, -1),
+         Site = gsub("g", " sgRNA", Site),
          guide = word(Site, start = 1, end = 2),
          X_lab = gsub("[0-9]", "+", X_lab),
          X_lab = gsub("HF\\+", "HF1", X_lab),
@@ -1233,8 +1488,8 @@ fig_5b1 <- ggplot(data = eCas9_mdots,
   ylab("Indel frequency (%)") +
   ggtitle("VEGFA sgRNA2")
 
-# plot figure s11a mdots for V2 - HF1
-fig_s11a1 <- ggplot(data = hf1_mdots,
+# plot figure s12a mdots for V2 - HF1
+fig_s12a1 <- ggplot(data = hf1_mdots,
                     aes(fct_inorder(X_lab), Indel_stringent, fill = Site)) +
   geom_beeswarm(cex = 2, dodge.width = 0.5, size = 2.5, pch = 21, alpha = 0.7) +
   stat_summary(data = hf1_mdots, fun = "mean",
@@ -1249,8 +1504,8 @@ fig_s11a1 <- ggplot(data = hf1_mdots,
   ylab("Indel frequency (%)") +
   ggtitle("VEGFA sgRNA2")
 
-# plot figure s11b mdots for V2 - hypa
-fig_s11b1 <- ggplot(data = hypa_mdots,
+# plot figure s12b mdots for V2 - hypa
+fig_s12b1 <- ggplot(data = hypa_mdots,
                     aes(fct_inorder(X_lab), Indel_stringent, fill = Site)) +
   geom_beeswarm(cex = 2, dodge.width = 0.5, size = 2.5, pch = 21, alpha = 0.7) +
   stat_summary(data = hypa_mdots, fun = "mean",
@@ -1266,7 +1521,7 @@ fig_s11b1 <- ggplot(data = hypa_mdots,
   ggtitle("VEGFA sgRNA2")
 
 ## plot indel frequency for VEGFAg2 mdots
-fig_s10a1 <- ggplot(data = V2_mdots,
+fig_s11a1 <- ggplot(data = V2_mdots,
                     aes(fct_inorder(X_lab), Indel_stringent, fill = Site)) +
   annotate(geom = "rect", xmin = 1.5, xmax = 2.5,
            ymin = -Inf, ymax = Inf,
@@ -1295,7 +1550,7 @@ fig_s10a1 <- ggplot(data = V2_mdots,
   ggtitle("VEGFA sgRNA2")
 
 ## plot indel frequency for VEGFAg3 mdots
-fig_s10b1 <- ggplot(data = V3_mdots,
+fig_s11b1 <- ggplot(data = V3_mdots,
                     aes(fct_inorder(X_lab), Indel_stringent, fill = Site)) +
   annotate(geom = "rect", xmin = 1.5, xmax = 2.5,
            ymin = -Inf, ymax = Inf, alpha = 0.4, fill = "grey") +
@@ -1320,7 +1575,7 @@ fig_s10b1 <- ggplot(data = V3_mdots,
   ggtitle("VEGFA sgRNA3")
 
 ## plot indel frequency for ZSCAN2g1 mdots
-fig_s10c1 <- ggplot(data = Z1_mdots,
+fig_s11c1 <- ggplot(data = Z1_mdots,
                     aes(fct_inorder(X_lab), Indel_stringent, fill = Site)) +
   annotate(geom = "rect", xmin = 1.5, xmax = 2.5,
            ymin = -Inf, ymax = Inf, alpha = 0.4, fill = "grey") +
@@ -1341,7 +1596,7 @@ fig_s10c1 <- ggplot(data = Z1_mdots,
   ggtitle("ZSCAN2 sgRNA1")
 
 ## plot indel frequency for FANCFg2 + ZSCAN2g1 mdots
-fig_s10d1 <- ggplot(data = F2Z1_mdots,
+fig_s11d1 <- ggplot(data = F2Z1_mdots,
                    aes(fct_inorder(X_lab), Indel_stringent, fill = Site)) +
   annotate(geom = "rect", xmin = 1.5, xmax = 2.5,
            ymin = 0, ymax = Inf, alpha = 0.4, fill = "grey") +
@@ -1413,21 +1668,19 @@ temp_ratio <- filter(F2Z1_mdots, Reads_passing >= 1000 & # filters out less than
 # split into two temporary  files
 ratio_on_f <- filter(temp_ratio, location == "ON" & guide == "FANCF sgRNA2")
 ratio_off_f <- filter(temp_ratio, location != "ON" & guide == "FANCF sgRNA2") %>%
-  mutate(
-    Indel_stringent = replace(Indel_stringent, Indel_stringent == 0, 0.01)
-  )
+  mutate(Indel_stringent = replace(Indel_stringent, Indel_stringent == 0, 0.01))
 ratio_on_z <- filter(temp_ratio, location == "ON" & guide == "ZSCAN2 sgRNA1")
 ratio_off_z <- filter(temp_ratio, location != "ON" & guide == "ZSCAN2 sgRNA1") %>%
-  mutate(
-    Indel_stringent = replace(Indel_stringent, Indel_stringent == 0, 0.01)
-  )
+  mutate(Indel_stringent = replace(Indel_stringent, Indel_stringent == 0, 0.01))
 
 # join based on guide, plot, calculate ratio
-F2Z1_f_mdots_ratio <- full_join(ratio_on_f, ratio_off_f, by = c("Experiment", "Name", "X_lab", "guide"),
+F2Z1_f_mdots_ratio <- full_join(ratio_on_f, ratio_off_f,
+                                by = c("Experiment", "Name", "X_lab", "guide"),
                          suffix = c("_ON", "_OT")) %>%
   mutate(ratio = Indel_stringent_ON / Indel_stringent_OT) # calculates ratio
 
-F2Z1_z_mdots_ratio <- full_join(ratio_on_z, ratio_off_z, by = c("Experiment", "Name", "X_lab", "guide"),
+F2Z1_z_mdots_ratio <- full_join(ratio_on_z, ratio_off_z,
+                                by = c("Experiment", "Name", "X_lab", "guide"),
                          suffix = c("_ON", "_OT")) %>%
   mutate(ratio = Indel_stringent_ON / Indel_stringent_OT) # calculates ratio
 
@@ -1435,7 +1688,7 @@ F2Z1_mdots_ratio <- bind_rows(F2Z1_f_mdots_ratio, F2Z1_z_mdots_ratio) %>%
   mutate(ratio = replace(ratio, ratio == 0, 0.1))
 
 ## plot VEGFAg2 mdots ratio
-fig_s10a2 <- ggplot(data = V2_mdots_ratio,
+fig_s11a2 <- ggplot(data = V2_mdots_ratio,
                    aes(fct_inorder(X_lab), ratio, fill = location_OT)) +
   annotate(geom = "rect", xmin = 1.5, xmax = 2.5,
            ymin = 0, ymax = Inf, alpha = 0.4, fill = "grey") +
@@ -1502,7 +1755,7 @@ fig_5b2 <- ggplot(data = eCas9_mdots_ratio,
   ggtitle(unique(eCas9_mdots_ratio$guide))
 
 ## plot VEGFAg2 mdots with triplex only, hf1
-fig_s11a2 <- ggplot(data = hf1_mdots_ratio,
+fig_s12a2 <- ggplot(data = hf1_mdots_ratio,
                     aes(fct_inorder(X_lab), ratio, fill = location_OT)) +
   geom_beeswarm(cex = 1.2, size = 2, dodge.width = 0.3,
                 pch = 21, alpha = 0.7) +
@@ -1519,7 +1772,7 @@ fig_s11a2 <- ggplot(data = hf1_mdots_ratio,
   ggtitle(unique(hf1_mdots_ratio$guide))
 
 ## plot VEGFAg2 mdots with triplex only, hypa
-fig_s11b2 <- ggplot(data = hypa_mdots_ratio,
+fig_s12b2 <- ggplot(data = hypa_mdots_ratio,
                     aes(fct_inorder(X_lab), ratio, fill = location_OT)) +
   geom_beeswarm(cex = 1.2, size = 2.5, dodge.width = 0.3,
                 pch = 21, alpha = 0.7) +
@@ -1536,7 +1789,7 @@ fig_s11b2 <- ggplot(data = hypa_mdots_ratio,
   ggtitle(unique(hypa_mdots_ratio$guide))
 
 ## plot VEGFAg3 mdots ratio
-fig_s10b2 <- ggplot(data = V3_mdots_ratio,
+fig_s11b2 <- ggplot(data = V3_mdots_ratio,
                    aes(fct_inorder(X_lab), ratio, fill = location_OT)) +
   annotate(geom = "rect", xmin = 1.5, xmax = 2.5,
            ymin = 0, ymax = Inf, alpha = 0.4, fill = "grey") +
@@ -1562,7 +1815,7 @@ fig_s10b2 <- ggplot(data = V3_mdots_ratio,
                      breaks = c(1, 2, 4, 8, 16, 32, 64, 128))
 
 ## plot ZSCAN2g1 mdots ratio
-fig_s10c2 <- ggplot(data = Z1_mdots_ratio,
+fig_s11c2 <- ggplot(data = Z1_mdots_ratio,
                     aes(fct_inorder(X_lab), ratio, fill = location_OT)) +
   annotate(geom = "rect", xmin = 1.5, xmax = 2.5,
            ymin = 1, ymax = Inf, alpha = 0.4, fill = "grey") +
@@ -1581,11 +1834,10 @@ fig_s10c2 <- ggplot(data = Z1_mdots_ratio,
   ggtitle(unique(Z1_mdots_ratio$guide)) +
   scale_y_log10(expand = c(0, 0), limits = c(1, 10000))
 
-
 options(scipen = 100000)
 
 ## plot FANCFg2 + ZSCAN2g1 mdots ratio
-fig_s10d2 <- ggplot(data = F2Z1_mdots_ratio,
+fig_s11d2 <- ggplot(data = F2Z1_mdots_ratio,
                    aes(fct_inorder(X_lab), ratio,
                        fill = location_OT)) +
   annotate(geom = "rect", xmin = 1.5, xmax = 2.5,
@@ -1661,24 +1913,195 @@ fig_5 <- v2a_labels + fig_5a1 + v2_labels + fig_5a2 +
 ggsave("Stat_analysis/Main_figures/Fig5_mdots.pdf", fig_5,
        height = 12, width = 12)
 
-## fig s10 - mdots extended
-fig_s10 <- v2a_labels + plot_spacer() + fig_s10a1 + v2_labels + fig_s10a2 +
-  v3b_labels + plot_spacer() + fig_s10b1 + v3_labels + fig_s10b2 +
-  z1c_labels + plot_spacer() + fig_s10c1 + z1_labels + fig_s10c2 +
-  f2z1d_labels + plot_spacer() + fig_s10d1 + f2z1_labels + fig_s10d2 +
+## fig s11 - mdots extended
+fig_s11 <- v2a_labels + plot_spacer() + fig_s11a1 + v2_labels + fig_s11a2 +
+  v3b_labels + plot_spacer() + fig_s11b1 + v3_labels + fig_s11b2 +
+  z1c_labels + plot_spacer() + fig_s11c1 + z1_labels + fig_s11c2 +
+  f2z1d_labels + plot_spacer() + fig_s11d1 + f2z1_labels + fig_s11d2 +
   plot_layout(ncol = 5, widths = c(0.05, 0.1, 1, 0.05, 1)) &
   theme(plot.margin = margin(t = 7, r = 7, b = 20, l = 7, unit = "pt"))
 
-ggsave("Stat_analysis/Supp_figures/FigS10_mdots_extended.pdf", fig_s10,
+ggsave("Stat_analysis/Supp_figures/FigS11_mdots_extended.pdf", fig_s11,
        height = 24, width = 16)
 
-fig_s11 <- v2a_labels + fig_s11a1 + v2_labels + fig_s11a2 + 
-  v2b_labels + fig_s11b1 + v2_labels + fig_s11b2 +
+fig_s12 <- v2a_labels + fig_s12a1 + v2_labels + fig_s12a2 + 
+  v2b_labels + fig_s12b1 + v2_labels + fig_s12b2 +
   plot_layout(ncol = 4, widths = c(0.05, 1, 0.05, 1)) &
   theme(plot.margin = margin(t = 7, r = 7, b = 20, l = 7, unit = "pt"))
 
-ggsave("Stat_analysis/Supp_figures/FigS11_hifi_mdots.pdf", fig_s11,
+ggsave("Stat_analysis/Supp_figures/FigS12_hifi_mdots.pdf", fig_s12,
        height = 12, width = 12)
+
+## create source file for fig 5a
+fig_5a_indels_source <- V2_mdots_reduced %>%
+  mutate(Panel = "a") %>%
+  select(Panel, Name, guide, target, X_lab, Indel_stringent) %>%
+  rename("Guide" = guide,
+         "Off-target" = target,
+         "X label" = X_lab)
+
+fig_5a_ratio_source <- V2_mdots_ratio_reduced %>%
+  mutate(Panel = "a") %>%
+  ratio_source()
+
+fig_5a_source <- left_join(fig_5a_indels_source, fig_5a_ratio_source,
+                           by = c("Panel", "Name", "Guide", "Off-target", "X label")) %>%
+  pivot_wider(names_from = "Off-target",
+              values_from = c("Indel_stringent", "Ratio")) %>%
+  select(-Ratio_ON) %>%
+  rename_at(vars(contains("Indel_stringent")), list(~gsub("Indel_stringent", "Indels ", .))) %>%
+  rename_all(list(~str_replace(., "_", " ")))
+
+## create source file for fig 5b
+fig_5b_indels_source <- eCas9_mdots %>%
+  mutate(Panel = "b") %>%
+  select(Panel, Name, guide, target, X_lab, Indel_stringent) %>%
+  rename("Guide" = guide,
+         "Off-target" = target,
+         "X label" = X_lab)
+
+fig_5b_ratio_source <- eCas9_mdots_ratio %>%
+  mutate(Panel = "b") %>%
+  ratio_source()
+
+fig_5b_source <- left_join(fig_5b_indels_source, fig_5b_ratio_source,
+                           by = c("Panel", "Name", "Guide", "Off-target", "X label")) %>%
+  pivot_wider(names_from = "Off-target",
+              values_from = c("Indel_stringent", "Ratio")) %>%
+  select(-Ratio_ON, -Ratio_OT2) %>%
+  rename_at(vars(contains("Indel_stringent")), list(~gsub("Indel_stringent", "Indels ", .))) %>%
+  rename_all(list(~str_replace(., "_", " ")))
+
+## create source file for fig s11a
+fig_s11a_indels_source <- V2_mdots %>%
+  mutate(Panel = "a") %>%
+  select(Panel, Name, guide, target, X_lab, Indel_stringent) %>%
+  rename("Guide" = guide,
+         "Off-target" = target,
+         "X label" = X_lab)
+
+fig_s11a_ratio_source <- V2_mdots_ratio %>%
+  mutate(Panel = "a") %>%
+  ratio_source()
+
+fig_s11a_source <- left_join(fig_s11a_indels_source, fig_s11a_ratio_source,
+                           by = c("Panel", "Name", "Guide", "Off-target", "X label")) %>%
+  pivot_wider(names_from = "Off-target",
+              values_from = c("Indel_stringent", "Ratio")) %>%
+  select(-Ratio_ON) %>%
+  rename_at(vars(contains("Indel_stringent")), list(~gsub("Indel_stringent", "Indels ", .))) %>%
+  rename_all(list(~str_replace(., "_", " ")))
+
+## create source file for fig s11b
+fig_s11b_indels_source <- V3_mdots %>%
+  mutate(Panel = "b") %>%
+  select(Panel, Name, guide, target, X_lab, Indel_stringent) %>%
+  rename("Guide" = guide,
+         "Off-target" = target,
+         "X label" = X_lab)
+
+fig_s11b_ratio_source <- V3_mdots_ratio %>%
+  mutate(Panel = "b") %>%
+  ratio_source()
+
+fig_s11b_source <- left_join(fig_s11b_indels_source, fig_s11b_ratio_source,
+                           by = c("Panel", "Name", "Guide", "Off-target", "X label")) %>%
+  pivot_wider(names_from = "Off-target",
+              values_from = c("Indel_stringent", "Ratio")) %>%
+  select(-Ratio_ON) %>%
+  rename_at(vars(contains("Indel_stringent")), list(~gsub("Indel_stringent", "Indels ", .))) %>%
+  rename_all(list(~str_replace(., "_", " ")))
+
+## create source file for fig s11c
+fig_s11c_indels_source <- Z1_mdots %>%
+  mutate(Panel = "c") %>%
+  select(Panel, Name, guide, target, X_lab, Indel_stringent) %>%
+  rename("Guide" = guide,
+         "Off-target" = target,
+         "X label" = X_lab)
+
+fig_s11c_ratio_source <- Z1_mdots_ratio %>%
+  mutate(Panel = "c") %>%
+  ratio_source()
+
+fig_s11c_source <- left_join(fig_s11c_indels_source, fig_s11c_ratio_source,
+                           by = c("Panel", "Name", "Guide", "Off-target", "X label")) %>%
+  pivot_wider(names_from = "Off-target",
+              values_from = c("Indel_stringent", "Ratio")) %>%
+  select(-Ratio_ON) %>%
+  rename_at(vars(contains("Indel_stringent")), list(~gsub("Indel_stringent", "Indels ", .))) %>%
+  rename_all(list(~str_replace(., "_", " ")))
+
+## create source file for fig s11d
+fig_s11d_indels_source <- F2Z1_mdots %>%
+  mutate(Panel = "d") %>%
+  select(Panel, Name, guide, target, X_lab, Indel_stringent) %>%
+  rename("Guide" = guide,
+         "Off-target" = target,
+         "X label" = X_lab)
+
+fig_s11d_ratio_source <- F2Z1_mdots_ratio %>%
+  mutate(Panel = "d") %>%
+  ratio_source()
+
+fig_s11d_source <- left_join(fig_s11d_indels_source, fig_s11d_ratio_source,
+                           by = c("Panel", "Name", "Guide", "Off-target", "X label")) %>%
+  pivot_wider(names_from = c("Guide", "Off-target"),
+              values_from = c("Indel_stringent", "Ratio")) %>%
+  select(-"Ratio_FANCF sgRNA2_ON", -"Ratio_ZSCAN2 sgRNA1_ON") %>%
+  rename_at(vars(contains("Indel_stringent")), list(~gsub("Indel_stringent", "Indels ", .))) %>%
+  rename_all(list(~str_replace_all(., "_", " ")))
+
+## create source file for fig s12a
+fig_s12a_indels_source <- hf1_mdots %>%
+  mutate(Panel = "a") %>%
+  select(Panel, Name, guide, target, X_lab, Indel_stringent) %>%
+  rename("Guide" = guide,
+         "Off-target" = target,
+         "X label" = X_lab)
+
+fig_s12a_ratio_source <- hf1_mdots_ratio %>%
+  mutate(Panel = "a") %>%
+  ratio_source()
+
+fig_s12a_source <- left_join(fig_s12a_indels_source, fig_s12a_ratio_source,
+                           by = c("Panel", "Name", "Guide", "Off-target", "X label")) %>%
+  pivot_wider(names_from = "Off-target",
+              values_from = c("Indel_stringent", "Ratio")) %>%
+  select(-Ratio_ON, -Ratio_OT2) %>%
+  rename_at(vars(contains("Indel_stringent")), list(~gsub("Indel_stringent", "Indels ", .))) %>%
+  rename_all(list(~str_replace(., "_", " ")))
+
+## create source file for fig s12b
+fig_s12b_indels_source <- hypa_mdots %>%
+  mutate(Panel = "b") %>%
+  select(Panel, Name, guide, target, X_lab, Indel_stringent) %>%
+  rename("Guide" = guide,
+         "Off-target" = target,
+         "X label" = X_lab)
+
+fig_s12b_ratio_source <- hypa_mdots_ratio %>%
+  mutate(Panel = "b") %>%
+  ratio_source()
+
+fig_s12b_source <- left_join(fig_s12b_indels_source, fig_s12b_ratio_source,
+                           by = c("Panel", "Name", "Guide", "Off-target", "X label")) %>%
+  pivot_wider(names_from = "Off-target",
+              values_from = c("Indel_stringent", "Ratio")) %>%
+  select(-Ratio_ON, -Ratio_OT2) %>%
+  rename_at(vars(contains("Indel_stringent")), list(~gsub("Indel_stringent", "Indels ", .))) %>%
+  rename_all(list(~str_replace(., "_", " ")))
+
+## append source files
+source_data_list <- append(source_data_list,
+                           list("Fig5a" = fig_5a_source,
+                                "Fig5b" = fig_5b_source,
+                                "FigS11a" = fig_s11a_source,
+                                "FigS11b" = fig_s11b_source,
+                                "FigS11c" = fig_s11c_source,
+                                "FigS11d" = fig_s11d_source,
+                                "FigS12a" = fig_s12a_source,
+                                "FigS12b" = fig_s12b_source))
 
 ```
 
@@ -1704,14 +2127,16 @@ dRNA_only <- read_csv("Data/dRNA_only_controls.csv") %>%
 # ===========================================================================================
 
 ## prepare data for fig s1c
-dRNA_only2 <- read_csv("DatadRNA_only_controls.csv") %>%
+dRNA_only2 <- read_csv("Data/dRNA_only_controls.csv") %>%
   filter(Experiment == 1 &
            Reads_passing >= 1000 &
            ## remove predicted sites since they are the same as original sites
            !grepl("predicted$", Site)) %>%
   mutate(X_lab = gsub("dRNA", "+ - +", X_lab),
-         X_lab = gsub("NT", "- - -", X_lab), 
-         Site = gsub("g", " sgRNA", Site))
+         X_lab = gsub("NT", "- - -", X_lab),
+         Site = gsub("g", " sgRNA", Site),
+         guide = word(Site, start = 1, end = 2),
+         target = word(Site, -1))
 
 ## make plot
 fig_s1c <- ggplot(data = dRNA_only2,
@@ -1728,6 +2153,14 @@ fig_s1c <- ggplot(data = dRNA_only2,
                      labels = c("on-target", "off-target")) +
   ylab("Indel frequency (%)") +
   ggtitle(unique(dRNA_only2$Site)[2])
+
+## create source file for fig s1c
+fig_s1c_source <- dRNA_only2 %>%
+  mutate(Panel = "c") %>%
+  indel_source()
+
+## append fig s1c to list
+source_data_list <- append(source_data_list, list("FigS1c" = fig_s1c_source))
 
 # ===========================================================================================
 
@@ -1808,7 +2241,7 @@ kable(dRNA_only_table) %>%
 ```{r nontargeting controls}
 
 ## read in nontargeting dRNA data and create list of plots
-nontargeting <- read_csv("Datanontargeting_controls.csv") %>%
+nontargeting <- read_csv("Data/nontargeting_controls.csv") %>%
   filter(Reads_passing > 1000 &
          Experiment != 12 &
          Experiment != 1) %>%
@@ -1823,7 +2256,7 @@ nontargeting <- read_csv("Datanontargeting_controls.csv") %>%
   mutate(Experiment = factor(Experiment, unique(Experiment))) %>%
   arrange(Experiment) %>%
   group_by(Experiment) %>%
-  mutate(tag = letters[Experiment]) %>%
+  mutate(Panel = letters[Experiment]) %>%
   nest() %>%
   ## make indel plot for nontargeting samples
   mutate(plot = map2(data, Experiment, ~ggplot(data = .x) +
@@ -1845,7 +2278,7 @@ nontargeting <- read_csv("Datanontargeting_controls.csv") %>%
                              aes(Date,
                                  Indel_stringent) +
                              geom_point(color = "NA") +
-                             labs(title = unique(.$tag)) +
+                             labs(title = unique(.$Panel)) +
                              scale_x_discrete(labels = label_grab(.)))) %>%
   ## join to plot side by side
   pivot_longer(cols = c("label_plots", "plot"),
@@ -1853,17 +2286,36 @@ nontargeting <- read_csv("Datanontargeting_controls.csv") %>%
                values_to = "plot")
 
 ## arrange nontargeting dRNA plots
-fig_s4 <- wrap_plots(nontargeting$plot, ncol = 6,
+fig_s5 <- wrap_plots(nontargeting$plot, ncol = 6,
                      widths = c(0.25, 1, 0.25, 1, 0.25, 1)) &
   theme(plot.margin = margin(t = 7, r = 7, b = 25, l = 7, "pt"))
 
-## save Figure S4 - nontargeting dRNA controls
-ggsave("Stat_analysis/Supp_figures/FigS4_nontargeting.pdf", fig_s4,
+## save Figure S5 - nontargeting dRNA controls
+ggsave("Stat_analysis/Supp_figures/FigS5_nontargeting.pdf", fig_s5,
        height = 24, width = 18)
+
+## create source file for fig s5
+fig_s5_source <- nontargeting %>%
+  select(Experiment, data) %>%
+  unique() %>%
+  unnest(data) %>%
+  mutate(X_lab = factor(X_lab, levels = c("+ + -", "+ + +", "+ + dNT", "- - -"))) %>%
+  indel_source() %>%
+  arrange(Panel, `X label`)
+
+## split by panel
+fig_s5_list <- fig_s5_source %>%
+  named_group_split(Panel)
+
+## change names to figure panels
+names(fig_s5_list) <- paste0("FigS5", names(fig_s5_list))
+
+## append fig s5
+source_data_list <- append(source_data_list, fig_s5_list)
 
 # ===========================================================================================
 
-nontargeting_FANCF <- read_csv("Datanontargeting_controls.csv") %>%
+nontargeting_FANCF <- read_csv("Data/nontargeting_controls.csv") %>%
   filter(Reads_passing > 1000 &
          Experiment == 1) %>%
   mutate(X_lab = gsub("[0-9]", "\\+", X_lab),
@@ -1919,17 +2371,31 @@ fig_1c_label <- label_plot(ratio_nontargeting,
   geom_point(color = NA) +
   theme(axis.text.x = element_blank()) +
   labs(title = "c")
+
+## create source data file for fig 1b
+fig_1b_source <- nontargeting_FANCF %>%
+  mutate(target = word(Site, -1),
+         Panel = "b",
+         X_lab = factor(X_lab, levels = c("+ + -", "+ + +", "+ + dNT", "- - -"))) %>%
+  indel_source() %>%
+  arrange(`X label`) %>%
+  mutate(Ratio = ifelse(`X label` == "- - -", NA, `Indels ON` / `Indels OT`))
+
+## append to source data file
+source_data_list <- append(source_data_list, list("Fig1b" = fig_1b_source))
+
 ```
 
 ```{r U2OS}
 
 ## read in data from U2OS cells
-u2os <- read_csv("DataU2OS.csv") %>%
+u2os <- read_csv("Data/U2OS.csv") %>%
   filter(Reads_passing >= 1000) %>%
   mutate(Site = gsub("g", " sgRNA", Site),
          X_lab = paste0(X_lab, "\n"),
          X_lab = gsub("[0-9]", "+", X_lab),
-         guide = word(Site, start = 1, end = 2))
+         guide = word(Site, start = 1, end = 2),
+         target = word(Site, -1))
 
 ## create ratio for U2OS cells
 u2os_ratio <- u2os %>%
@@ -1983,7 +2449,7 @@ fig_1d2 <- ggplot(data = u2os_ratio_f,
   ggtitle(paste0("U2OS - ", unique(u2os_ratio_f$guide), " ",
                  unique(u2os_ratio_f$location_OT)))
 
-## create label for fig 1d and s5a
+## create label for fig 1d and s6a
 fig_1d_label <- label_plot(data = u2os_f,
                            aes(x = as_factor(Experiment),
                                y = Indel_stringent)) +
@@ -1992,6 +2458,20 @@ fig_1d_label <- label_plot(data = u2os_f,
 
 fig_1d1_label <- fig_1d_label +
   labs(title = "d")
+
+## create source file for fig 1d
+fig_1d_indel_source <- u2os_f %>%
+  mutate(Panel = "d") %>%
+  indel_source()
+
+fig_1d_ratio_source <- u2os_ratio_f %>%
+  mutate(Panel = "d") %>%
+  ratio_source()
+
+fig_1d_source <- left_join(fig_1d_indel_source, fig_1d_ratio_source)
+
+## append to source data list
+source_data_list <- append(source_data_list, list("Fig1d" = fig_1d_source))
 
 # =============================================================================================
 
@@ -2002,8 +2482,8 @@ u2os_v <- u2os %>%
 u2os_ratio_v <- u2os_ratio %>%
   filter(Experiment == 2)
 
-## plot fig s5 - alternative site for U2OS
-fig_s5a1 <- ggplot(data = u2os_v,
+## plot fig s6 - alternative site for U2OS
+fig_s6a1 <- ggplot(data = u2os_v,
                     aes(fct_inorder(X_lab), Indel_stringent, fill = Site)) +
   geom_beeswarm(cex = 1.2, size = 2.5, pch = 21, alpha = 0.7) +
   stat_summary(data = u2os_v, fun = "mean",
@@ -2017,7 +2497,7 @@ fig_s5a1 <- ggplot(data = u2os_v,
   ggtitle(paste0("U2OS - ", unique(u2os_v$Site)[2]))
   
 ## plot ratios
-fig_s5a2 <- ggplot(data = u2os_ratio_v,
+fig_s6a2 <- ggplot(data = u2os_ratio_v,
                     aes(fct_inorder(X_lab), ratio)) +
   geom_beeswarm(size = 2.5, cex = 1.2, pch = 21,
                 fill = pal[5], alpha = 0.7) +
@@ -2030,25 +2510,41 @@ fig_s5a2 <- ggplot(data = u2os_ratio_v,
   ggtitle(paste0("U2OS - ", unique(u2os_ratio_v$guide), " ",
                  unique(u2os_ratio_v$location_OT)))
 
-## create label for fig s5a
-fig_s5a_label <- label_plot(data = u2os_v,
+## create label for fig s6a
+fig_s6a_label <- label_plot(data = u2os_v,
                             aes(x = as_factor(Experiment),
                                 y = Indel_stringent)) +
   geom_point(color = "NA") +
   scale_x_discrete(labels = "\nCas9\n\nVEGFA sgRNA3\n\ndRNA")
 
-fig_s5a1_label <- fig_s5a_label +
+fig_s6a1_label <- fig_s6a_label +
   labs(title = "a")
+
+## create source file for fig s6a
+fig_s6a_indel_source <- u2os_v %>%
+  mutate(Panel = "a") %>%
+  indel_source()
+
+fig_s6a_ratio_source <- u2os_ratio_v %>%
+  mutate(Panel = "a") %>%
+  ratio_source()
+
+fig_s6a_source <- left_join(fig_s6a_indel_source, fig_s6a_ratio_source)
+
+## append to source data list
+source_data_list <- append(source_data_list, list("FigS6a" = fig_s6a_source))
 
 ```
 
 ```{r ELF}
 
 ## read in data from ELF cells
-elf <- read_csv("Dataelf.csv") %>%
+elf <- read_csv("Data/elf.csv") %>%
   filter(Reads_passing >= 1000) %>%
-  mutate(Site = gsub("g", " sgRNA", Site),
-         guide = word(Site, start = 1, end = 2),
+  mutate(guide = word(Site, 1),
+         Site = gsub("g", " sgRNA", Site),
+         guide = gsub("g", " sgRNA", guide),
+         target = word(Site, -1),
          X_lab = gsub("[0-9]", "+", X_lab))
 
 ## calculate ratios for ELF 
@@ -2140,11 +2636,6 @@ GHHHHIJJJJ
 KLLLLMNNNN
 "
 
-layout_fig1.2 <- "
-ABBBBCDDDDGHHHHIJJJJ
-EFFFFFFFFFKLLLLMNNNN
-"
-
 ## align plots
 fig_1_bottom <- fig_1b_label + fig_1b1 + fig_1_label + fig_1b2 +
   fig_1c_label + fig_1c + 
@@ -2159,6 +2650,20 @@ fig_1 <- fig_1a / fig_1_bottom + plot_layout(heights = c(1, 2)) &
 ## save fig 1
 ggsave("Stat_analysis/Main_figures/Fig1_FANCF.pdf", fig_1,
        height = 30, width = 10)
+
+## create source file for fig 1e
+fig_1e_indel_source <- elf_f %>%
+  mutate(Panel = "e") %>%
+  indel_source()
+
+fig_1e_ratio_source <- elf_ratio_f %>%
+  mutate(Panel = "e") %>%
+  ratio_source()
+
+fig_1e_source <- left_join(fig_1e_indel_source, fig_1e_ratio_source)
+
+## append to source data list
+source_data_list <- append(source_data_list, list("Fig1e" = fig_1e_source))
 
 # =============================================================================================
 
@@ -2178,7 +2683,7 @@ labels_h <- elf_h %>%
 # =============================================================================================
 
 ## plot indels for HBB R03 - ELF
-fig_s5b1 <- ggplot(data = elf_h,
+fig_s6b1 <- ggplot(data = elf_h,
                     aes(fct_inorder(X_lab), Indel_stringent, fill = Site)) +
   geom_beeswarm(size = 2.5, cex = 1.2, pch = 21, alpha = 0.7) +
   stat_summary(data = elf_h, fun = "mean",
@@ -2196,7 +2701,7 @@ fig_s5b1 <- ggplot(data = elf_h,
   ggtitle(paste0("ELF1 - ", unique(elf_h$Site)[2]))
 
 ## plot ratios
-fig_s5b2 <- ggplot(data = elf_ratio_h,
+fig_s6b2 <- ggplot(data = elf_ratio_h,
                     aes(fct_inorder(X_lab), ratio)) +
   geom_beeswarm(size = 2.5, cex = 1.2, pch = 21,
                 fill = pal[5], alpha = 0.7) +
@@ -2208,34 +2713,48 @@ fig_s5b2 <- ggplot(data = elf_ratio_h,
   ylab("On-target/Off-target\nindel frequency ratio") +
   ggtitle(paste0("ELF1 - ", unique(elf_ratio_h$guide), " ", unique(elf_ratio_h$location_OT)))
 
-## create label for fig s5b
-fig_s5b_label <- label_plot(data = elf_h,
+## create label for fig s6b
+fig_s6b_label <- label_plot(data = elf_h,
                             aes(x = as_factor(Experiment),
                                 y = Indel_stringent)) +
   geom_point(color = "NA") +
-  scale_x_discrete(labels = "\niCas9\n\nHBB-R03 sgRNA\n\ndRNA\n\nDox")
+  scale_x_discrete(labels = "\niCas9\n\nHBB-R03\n\ndRNA\n\nDox")
 
-fig_s5b1_label <- fig_s5b_label +
+fig_s6b1_label <- fig_s6b_label +
   labs(title = "b")
 
 ## align plots
-fig_s5 <- fig_s5a1_label + plot_spacer() + fig_s5a1 +
-  fig_s5a_label + fig_s5a2 +
-  fig_s5b1_label + plot_spacer() + fig_s5b1 +
-  fig_s5b_label + fig_s5b2 +
+fig_s6 <- fig_s6a1_label + plot_spacer() + fig_s6a1 +
+  fig_s6a_label + fig_s6a2 +
+  fig_s6b1_label + plot_spacer() + fig_s6b1 +
+  fig_s6b_label + fig_s6b2 +
   plot_layout(ncol = 5, widths = c(0.05, 0.05, 1, 0.01, 1)) &
   theme(plot.margin = margin(t = 7, r = 7, b = 15, l = 7, unit = "pt"))
 
-## save fig s5 - additional sites for other cell types
-ggsave("Stat_analysis/Supp_figures/FigS5_additional_cell_types.pdf", fig_s5,
+## save fig s6 - additional sites for other cell types
+ggsave("Stat_analysis/Supp_figures/FigS6_additional_cell_types.pdf", fig_s6,
        height = 12, width = 12)
+
+## create source file for fig s6b
+fig_s6b_indel_source <- elf_h %>%
+  mutate(Panel = "b") %>%
+  indel_source()
+
+fig_s6b_ratio_source <- elf_ratio_h %>%
+  mutate(Panel = "b") %>%
+  ratio_source()
+
+fig_s6b_source <- left_join(fig_s6b_indel_source, fig_s6b_ratio_source)
+
+## append to source data list
+source_data_list <- append(source_data_list, list("FigS6b" = fig_s6b_source))
 
 ```
 
 ```{r BFP dRECS}
 
 ## read in bfp/gfp flow summary data
-bfp <- read_csv("Datadrecs.csv") %>%
+bfp <- read_csv("Data/drecs.csv") %>%
   mutate(X_lab = fct_relevel(X_lab, "- - - -", after = Inf)) %>%
   rename(Indels = NHEJ)
 
@@ -2256,19 +2775,19 @@ bfp_screen <- bfp %>%
   group_by(sgRNA_group, Editing) %>%
   mutate(fold_change = Percent / first(avg)) %>%
   ungroup()
-
-## label for fig s12b
-fig_s12bd_label <- label_plot(data = bfp_screen,
+  
+## label for fig s13b
+fig_s13bd_label <- label_plot(data = bfp_screen,
                              aes(x = as_factor(Experiment),
                                  y = Percent)) +
   geom_point(color = NA) +
   scale_x_discrete(labels = "\nCas9\n\nBFP sgRNA\n\nDonor\n\ndRNA")
 
-fig_s12b_label <- fig_s12bd_label +
+fig_s13b_label <- fig_s13bd_label +
   labs(title = "b")
 
 ## dRNA screen - indels and HDR
-bfp_screen_s12b1 <- bfp_screen %>%
+bfp_screen_s13b1 <- bfp_screen %>%
   filter(Editing == "HDR" | Editing == "Indels") %>%
   mutate(sgRNA_group = word(X_lab, start = 2),
          sgRNA_group = factor(sgRNA_group, levels = c("1", "2", "-")),
@@ -2279,22 +2798,22 @@ bfp_screen_s12b1 <- bfp_screen %>%
          ymin = ifelse(facet_group == 1, 10, 0),
          ymax = ifelse(facet_group == 1, 25, 3))
 
-## plot fig s12b panel 1, dRNA screen - indels and HDR
-fig_s12b1 <- ggplot(data = bfp_screen_s12b1,
+## plot fig s13b panel 1, dRNA screen - indels and HDR
+fig_s13b1 <- ggplot(data = bfp_screen_s13b1,
                     aes(X_lab, Percent, fill = Editing)) +
   geom_beeswarm(cex = 1.2, size = 2.5, pch = 21, alpha = 0.7) +
-  stat_summary(data = bfp_screen_s12b1, fun = "mean",
+  stat_summary(data = bfp_screen_s13b1, fun = "mean",
                geom = "point", pch = "_", size = 8) +
   facet_grid(facet_group ~ ., scales = "free", space = "free_x") +
   theme(strip.background = element_blank(),
         strip.text = element_blank(),
         panel.spacing = unit(15, "pt")) +
-  scale_x_discrete(breaks = unique(bfp_screen_s12b1$X_lab),
-                   labels = addline_format(unique(bfp_screen_s12b1$X_lab))) +
+  scale_x_discrete(breaks = unique(bfp_screen_s13b1$X_lab),
+                   labels = addline_format(unique(bfp_screen_s13b1$X_lab))) +
   scale_y_continuous(expand = c(0, 0)) +
-  scale_fill_manual(values = pal, breaks = unique(bfp_screen_s12b1$Editing),
+  scale_fill_manual(values = pal, breaks = unique(bfp_screen_s13b1$Editing),
                      labels = unique(gsub(".*\\s", "",
-                                          unique(bfp_screen_s12b1$Editing)))) +
+                                          unique(bfp_screen_s13b1$Editing)))) +
   ylab("% editing") +
   geom_blank(aes(y = ymin)) +
   geom_blank(aes(y = ymax))
@@ -2302,20 +2821,20 @@ fig_s12b1 <- ggplot(data = bfp_screen_s12b1,
 # =============================================================================================
 
 ## filter for dRNA screen - % HDR of all cutting events
-bfp_screen_s12b2 <- bfp_screen %>%
+bfp_screen_s13b2 <- bfp_screen %>%
   filter(Editing == "HDR_Percent_Total" &
            word(X_lab, start = 3) != "-") %>%
   mutate(sgRNA_group = word(X_lab, start = 2),
          X_lab = gsub("^\\+ [0-9]", "+ +", X_lab))
 
-## plot fig s12b, panel 2 - % HDR of all cutting events 
-fig_s12b2 <- ggplot(data = bfp_screen_s12b2, aes(X_lab, Percent)) +
+## plot fig s13b, panel 2 - % HDR of all cutting events 
+fig_s13b2 <- ggplot(data = bfp_screen_s13b2, aes(X_lab, Percent)) +
   geom_beeswarm(cex = 1.2, size = 2.5, pch = 21,
                 alpha = 0.7, fill = pal[5]) +
-  stat_summary(data = bfp_screen_s12b2, fun = "mean",
+  stat_summary(data = bfp_screen_s13b2, fun = "mean",
                geom = "point", pch = "_", size = 8) +
-  scale_x_discrete(breaks = unique(bfp_screen_s12b2$X_lab),
-                   labels = addline_format(unique(bfp_screen_s12b2$X_lab))) +
+  scale_x_discrete(breaks = unique(bfp_screen_s13b2$X_lab),
+                   labels = addline_format(unique(bfp_screen_s13b2$X_lab))) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, 5),
                      breaks = seq(0, 5, by = 1)) +
   ylab("% HDR of total cutting")
@@ -2323,23 +2842,41 @@ fig_s12b2 <- ggplot(data = bfp_screen_s12b2, aes(X_lab, Percent)) +
 # =============================================================================================
 
 ## filter for dRNA screen - fold change in HDR
-bfp_screen_s12b3 <- bfp_screen %>%
+bfp_screen_s13b3 <- bfp_screen %>%
   filter(sgRNA_group == "1 +" |
          sgRNA_group == "2 +") %>%
   filter(Editing == "HDR") %>%
   mutate(X_lab = gsub("^\\+ [0-9]", "+ +", X_lab))
 
-## plot fig s12b, panel 3 - fold change in HDR
-fig_s12b3 <- ggplot(data = bfp_screen_s12b3, aes(X_lab, fold_change)) +
+## plot fig s13b, panel 3 - fold change in HDR
+fig_s13b3 <- ggplot(data = bfp_screen_s13b3, aes(X_lab, fold_change)) +
   geom_beeswarm(cex = 1.2, size = 2.5, pch = 21,
                 alpha = 0.7, fill = pal[3]) +
-  stat_summary(data = bfp_screen_s12b3, fun = "mean",
+  stat_summary(data = bfp_screen_s13b3, fun = "mean",
                geom = "point", pch = "_", size = 8) + # plots mean of each site
-  scale_x_discrete(breaks = unique(bfp_screen_s12b3$X_lab),
-                   labels = addline_format(unique(bfp_screen_s12b3$X_lab))) +
+  scale_x_discrete(breaks = unique(bfp_screen_s13b3$X_lab),
+                   labels = addline_format(unique(bfp_screen_s13b3$X_lab))) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, 4),
                      breaks = seq(0, 4, by = 1)) +
   ylab("Fold change in HDR")
+
+## create source file for fig s13b
+fig_s13b_source <- full_join(bfp_screen_s13b1, bfp_screen_s13b2) %>%
+  mutate(Panel = "b") %>%
+  select(Panel, Sample, X_lab, Editing, Percent, fold_change) %>%
+  pivot_wider(names_from = Editing,
+              values_from = c(Percent, fold_change)) %>%
+  select(-c("fold_change_Indels", "fold_change_HDR_Percent_Total")) %>%
+  mutate(fold_change_HDR = ifelse(X_lab == "+ + - -", NA,
+                                  ifelse(X_lab == "- - - -", NA, fold_change_HDR))) %>%
+  rename_all(list(~str_replace_all(., "_", " "))) %>%
+  rename_at(vars(contains("Percent ")), list(~gsub("Percent ", "", .))) %>%
+  rename("X label" = `X lab`,
+         "Fold change in HDR" = `fold change HDR`,
+         "Percent HDR of total editing" = `HDR Total`)
+
+## append to source list
+source_data_list <- append(source_data_list, list("FigS13b" = fig_s13b_source))
 
 # =============================================================================================
 
@@ -2362,7 +2899,7 @@ bfp_dRNA_amount <- bfp %>%
   ungroup()
 
 ## filter for dRNA ratio
-bfp_dRNA_amount_s12c1 <- bfp_dRNA_amount %>%
+bfp_dRNA_amount_s13c1 <- bfp_dRNA_amount %>%
   filter(Editing == "HDR" | Editing == "Indels") %>%
   mutate(sgRNA_group = word(X_lab, start = 2),
          new_X = gsub("^\\+ [0-9]", "+ +", new_X),
@@ -2371,39 +2908,39 @@ bfp_dRNA_amount_s12c1 <- bfp_dRNA_amount %>%
          ymin = if_else(facet_group == 1, 15, 0),
          ymax = if_else(facet_group == 1, 35, 3))
 
-## plot fig s12c, panel 1 - indels and HDR
-fig_s12c1 <- ggplot(data = bfp_dRNA_amount_s12c1, aes(new_X, Percent, fill = Editing)) +
+## plot fig s13c, panel 1 - indels and HDR
+fig_s13c1 <- ggplot(data = bfp_dRNA_amount_s13c1, aes(new_X, Percent, fill = Editing)) +
   geom_beeswarm(cex = 1.2, size = 2.5, pch = 21, alpha = 0.7) +
-  stat_summary(data = bfp_dRNA_amount_s12c1, fun = "mean",
+  stat_summary(data = bfp_dRNA_amount_s13c1, fun = "mean",
                geom = "point", pch = "_", size = 8) + # plots mean of each site
-  scale_x_discrete(breaks = unique(bfp_dRNA_amount_s12c1$new_X),
-                   labels = addline_format(unique(bfp_dRNA_amount_s12c1$new_X))) +
+  scale_x_discrete(breaks = unique(bfp_dRNA_amount_s13c1$new_X),
+                   labels = addline_format(unique(bfp_dRNA_amount_s13c1$new_X))) +
   facet_grid(facet_group ~ ., scales = "free") +
   theme(strip.background = element_blank(),
         strip.text = element_blank(),
         panel.spacing = unit(15, "pt")) +
   scale_y_continuous(expand = c(0, 0)) +
-  scale_fill_manual(values = pal, breaks = unique(bfp_dRNA_amount_s12c1$Editing),
+  scale_fill_manual(values = pal, breaks = unique(bfp_dRNA_amount_s13c1$Editing),
                      labels = unique(gsub(".*\\s", "",
-                                          unique(bfp_dRNA_amount_s12c1$Editing)))) +
+                                          unique(bfp_dRNA_amount_s13c1$Editing)))) +
   ylab("% editing") +
   geom_blank(aes(y = ymin)) +
   geom_blank(aes(y = ymax))
 
-## label for fig s12c
-fig_s12c_label <- label_plot(data = bfp_dRNA_amount,
+## label for fig s13c
+fig_s13c_label <- label_plot(data = bfp_dRNA_amount,
                              aes(x = as_factor(Experiment),
                                  y = Percent)) +
   geom_point(color = NA) +
   scale_x_discrete(labels = "\nCas9\n\nBFP sgRNA\n\nDonor\n\ndRNA\n\nDonor:dRNA ratio")
 
-fig_s12c1_label <- fig_s12c_label +
+fig_s13c1_label <- fig_s13c_label +
   labs(title = "c")
 
 # =============================================================================================
 
 ## filter dRNA ratio for % HDR of total cutting
-bfp_dRNA_amount_s12c2 <- bfp_dRNA_amount %>%
+bfp_dRNA_amount_s13c2 <- bfp_dRNA_amount %>%
   filter(Editing == "HDR_Percent_Total" &
                                new_X != "+ 1 - - 0" &
                                new_X != "+ 2 - - 0") %>%
@@ -2411,15 +2948,15 @@ bfp_dRNA_amount_s12c2 <- bfp_dRNA_amount %>%
          new_X = gsub("^\\+ [0-9]", "+ +", new_X),
          new_X = gsub("3", "+", new_X))
 
-## plot fig s12c, panel 2 - % HDR of total cutting
-fig_s12c2 <- ggplot(data = bfp_dRNA_amount_s12c2,
+## plot fig s13c, panel 2 - % HDR of total cutting
+fig_s13c2 <- ggplot(data = bfp_dRNA_amount_s13c2,
                     aes(new_X, Percent)) +
   geom_beeswarm(cex = 1.2, size = 2.5, pch = 21,
                 alpha = 0.7, fill = pal[5]) +
-  stat_summary(data = bfp_dRNA_amount_s12c2, fun = "mean",
+  stat_summary(data = bfp_dRNA_amount_s13c2, fun = "mean",
                geom = "point", pch = "_", size = 8) +
-  scale_x_discrete(breaks = unique(bfp_dRNA_amount_s12c2$new_X),
-                   labels = addline_format(unique(bfp_dRNA_amount_s12c2$new_X))) +
+  scale_x_discrete(breaks = unique(bfp_dRNA_amount_s13c2$new_X),
+                   labels = addline_format(unique(bfp_dRNA_amount_s13c2$new_X))) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, 10), breaks = seq(0, 10, by = 2),
                      labels = seq(0, 10, by = 2)) +
   ylab("% HDR of total editing")
@@ -2427,7 +2964,7 @@ fig_s12c2 <- ggplot(data = bfp_dRNA_amount_s12c2,
 # =============================================================================================
 
 ## filter dRNA ratio - fold change in HDR
-bfp_dRNA_amount_s12c3 <- bfp_dRNA_amount %>%
+bfp_dRNA_amount_s13c3 <- bfp_dRNA_amount %>%
   filter(sgRNA_group == "1 +" |
          sgRNA_group == "2 +") %>%
   filter(Editing == "HDR") %>%
@@ -2435,16 +2972,34 @@ bfp_dRNA_amount_s12c3 <- bfp_dRNA_amount %>%
          new_X = gsub("3", "+", new_X))
 
 ## plot fig 12c, panel 3 - fold change in HDR
-fig_s12c3 <- ggplot(data = bfp_dRNA_amount_s12c3,
+fig_s13c3 <- ggplot(data = bfp_dRNA_amount_s13c3,
                    aes(new_X, fold_change)) +
   geom_beeswarm(cex = 1.2, size = 2.5, pch = 21,
                 alpha = 0.7, fill = pal[3]) +
-  stat_summary(data = bfp_dRNA_amount_s12c3, fun = "mean",
+  stat_summary(data = bfp_dRNA_amount_s13c3, fun = "mean",
                geom = "point", pch = "_", size = 8) +
-  scale_x_discrete(breaks = unique(bfp_dRNA_amount_s12c3$new_X),
-                   labels = addline_format(unique(bfp_dRNA_amount_s12c3$new_X))) +
+  scale_x_discrete(breaks = unique(bfp_dRNA_amount_s13c3$new_X),
+                   labels = addline_format(unique(bfp_dRNA_amount_s13c3$new_X))) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, 4)) +
   ylab("Fold change in HDR")
+
+## create source file for fig s13c
+fig_s13c_source <- full_join(bfp_dRNA_amount_s13c1, bfp_dRNA_amount_s13c2) %>%
+  mutate(Panel = "c") %>%
+  select(Panel, Ratio_dRNA, Sample, new_X, Editing, Percent, fold_change) %>%
+  pivot_wider(names_from = Editing,
+              values_from = c(Percent, fold_change)) %>%
+  select(-c("fold_change_Indels", "fold_change_HDR_Percent_Total")) %>%
+  mutate(fold_change_HDR = ifelse(new_X == "+ + - - 0", NA, fold_change_HDR)) %>%
+  rename_all(list(~str_replace_all(., "_", " "))) %>%
+  rename_at(vars(contains("Percent ")), list(~gsub("Percent ", "", .))) %>%
+  rename("X label" = `new X`,
+         "Fold change in HDR" = `fold change HDR`,
+         "Percent HDR of total editing" = `HDR Total`,
+         "dRNA:sgRNA ratio" = `Ratio dRNA`)
+
+## append to source list
+source_data_list <- append(source_data_list, list("FigS13c" = fig_s13c_source))
 
 # =============================================================================================
 
@@ -2465,55 +3020,55 @@ bfp_donor_screen <- filter(bfp, Experiment == 3 &
          ymax = if_else(facet_group == 1, 30, 5))
 
 ## filter donor screen for indels and HDR
-bfp_donor_screen_s12d1 <- bfp_donor_screen %>%
+bfp_donor_screen_s13d1 <- bfp_donor_screen %>%
   filter(Editing == "HDR" | Editing == "Indels")
 
-## plot fig s12d, panel 1 - indels and HDR
-fig_s12d1 <- ggplot(data = bfp_donor_screen_s12d1,
+## plot fig s13d, panel 1 - indels and HDR
+fig_s13d1 <- ggplot(data = bfp_donor_screen_s13d1,
                     aes(X_lab, Percent, fill = Editing)) +
   geom_beeswarm(cex = 1.2, size = 2.5, pch = 21, alpha = 0.7) +
-  stat_summary(data = bfp_donor_screen_s12d1, fun = "mean",
+  stat_summary(data = bfp_donor_screen_s13d1, fun = "mean",
                geom = "point", pch = "_", size = 8) + 
   facet_grid(facet_group ~ ., scales = "free") +
   theme(strip.background = element_blank(),
         strip.text = element_blank(),
         panel.spacing = unit(15, "pt")) +
-  scale_x_discrete(breaks = unique(bfp_donor_screen_s12d1$X_lab),
-                   labels = addline_format(unique(bfp_donor_screen_s12d1$X_lab))) +
+  scale_x_discrete(breaks = unique(bfp_donor_screen_s13d1$X_lab),
+                   labels = addline_format(unique(bfp_donor_screen_s13d1$X_lab))) +
   scale_y_continuous(expand = c(0, 0)) +
-  scale_fill_manual(values = pal, breaks = unique(bfp_donor_screen_s12d1$Editing),
-                     labels = unique(gsub(".*\\s", "", unique(bfp_donor_screen_s12d1$Editing)))) +
+  scale_fill_manual(values = pal, breaks = unique(bfp_donor_screen_s13d1$Editing),
+                     labels = unique(gsub(".*\\s", "", unique(bfp_donor_screen_s13d1$Editing)))) +
   ylab("% editing") +
   geom_blank(aes(y = ymin)) +
   geom_blank(aes(y = ymax))
 
-## label for fig s12d
-fig_s12d_label <- fig_s12bd_label +
+## label for fig s13d
+fig_s13d_label <- fig_s13bd_label +
   labs(title = "d")
 
 # =============================================================================================
 
 ## filter donor screen for % HDR of total cutting
-bfp_donor_screen_s12d2 <- bfp_donor_screen %>%
+bfp_donor_screen_s13d2 <- bfp_donor_screen %>%
   filter(Editing == "HDR_Percent_Total" &
                                 word(X_lab, start = 3) != "-")
 
-## plot fig s12d, part 2 - % HDR of total cutting
-fig_s12d2 <- ggplot(data = bfp_donor_screen_s12d2,
+## plot fig s13d, part 2 - % HDR of total cutting
+fig_s13d2 <- ggplot(data = bfp_donor_screen_s13d2,
                    aes(X_lab, Percent)) +
   geom_beeswarm(cex = 1.2, size = 2.5, pch = 21, 
                 fill = pal[5], alpha = 0.7) +
-  stat_summary(data = bfp_donor_screen_s12d2, fun = "mean",
+  stat_summary(data = bfp_donor_screen_s13d2, fun = "mean",
                geom = "point", pch = "_", size = 8) +
-  scale_x_discrete(breaks = unique(bfp_donor_screen_s12d2$X_lab),
-                   labels = addline_format(unique(bfp_donor_screen_s12d2$X_lab))) +
+  scale_x_discrete(breaks = unique(bfp_donor_screen_s13d2$X_lab),
+                   labels = addline_format(unique(bfp_donor_screen_s13d2$X_lab))) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, 20), breaks = seq(0, 20, by = 5)) +
   ylab("% HDR of total editing")
 
 # =============================================================================================
 
 ## filter for fold change in HDR
-bfp_donor_screen_s12d3 <- bfp_donor_screen %>%
+bfp_donor_screen_s13d3 <- bfp_donor_screen %>%
   filter(word(X_lab, start = 3) != "-" &
          Editing == "HDR") %>%
   mutate(sgRNA_group = word(X_lab, start = 2, end = 3)) %>%
@@ -2524,42 +3079,59 @@ bfp_donor_screen_s12d3 <- bfp_donor_screen %>%
   mutate(fold_change = Percent / first(avg)) %>%
   ungroup()
   
-## plot fig s12, panel 3 - fold change in HDR
-fig_s12d3 <- ggplot(data = bfp_donor_screen_s12d3,
+## plot fig s13, panel 3 - fold change in HDR
+fig_s13d3 <- ggplot(data = bfp_donor_screen_s13d3,
                     aes(X_lab, fold_change)) +
   geom_beeswarm(cex = 1.2, size = 2.5, pch = 21,
                 fill = pal[3], alpha = 0.7) +
-  stat_summary(data = bfp_donor_screen_s12d3, fun = "mean",
+  stat_summary(data = bfp_donor_screen_s13d3, fun = "mean",
                geom = "point", pch = "_", size = 8) + 
-  scale_x_discrete(breaks = unique(bfp_donor_screen_s12d3$X_lab),
-                   labels = addline_format(unique(bfp_donor_screen_s12d3$X_lab))) +
+  scale_x_discrete(breaks = unique(bfp_donor_screen_s13d3$X_lab),
+                   labels = addline_format(unique(bfp_donor_screen_s13d3$X_lab))) +
   scale_y_continuous(expand = c(0, 0), limits = c(0, 4),
                      breaks = seq(0, 4, by = 1)) +
   ylab("Fold change in HDR")
 
+## create source file for fig s13d
+fig_s13d_source <- full_join(bfp_donor_screen_s13d1, bfp_donor_screen_s13d2) %>%
+  left_join(bfp_donor_screen_s13d3) %>%
+  mutate(Panel = "d") %>%
+  select(Panel, Sample, X_lab, Editing, Percent, fold_change) %>%
+  pivot_wider(names_from = Editing,
+              values_from = c(Percent, fold_change)) %>%
+  select(-c("fold_change_Indels", "fold_change_HDR_Percent_Total")) %>%
+  rename_all(list(~str_replace_all(., "_", " "))) %>%
+  rename_at(vars(contains("Percent ")), list(~gsub("Percent ", "", .))) %>%
+  rename("X label" = `X lab`,
+         "Fold change in HDR" = `fold change HDR`,
+         "Percent HDR of total editing" = `HDR Total`)
+
+## append to source list
+source_data_list <- append(source_data_list, list("FigS13d" = fig_s13d_source))
+
 # =============================================================================================
 
-## plot fig s12a - flow gating for dRECS
-fig_s12a <- ggdraw() +
+## plot fig s13a - flow gating for dRECS
+fig_s13a <- ggdraw() +
   theme_cowplot() + 
   theme(plot.title = element_text(size = 36, hjust = 0),
         axis.line = element_blank()) +
   labs(title = "a") +
-  draw_image(magick::image_read_pdf("Images/figs12a.pdf", density = 600))
+  draw_image(magick::image_read_pdf("Images/figs13a.pdf", density = 600))
 
 ## align bottom half of plot
-fig_s12_bottom <- fig_s12b_label + fig_s12b1 + fig_s12bd_label + fig_s12b2 + fig_s12bd_label + fig_s12b3 +
-  fig_s12c1_label + fig_s12c1 + fig_s12c_label + fig_s12c2 + fig_s12c_label + fig_s12c3 +
-  fig_s12d_label + fig_s12d1 + fig_s12bd_label + fig_s12d2 + fig_s12bd_label + fig_s12d3 +
+fig_s13_bottom <- fig_s13b_label + fig_s13b1 + fig_s13bd_label + fig_s13b2 + fig_s13bd_label + fig_s13b3 +
+  fig_s13c1_label + fig_s13c1 + fig_s13c_label + fig_s13c2 + fig_s13c_label + fig_s13c3 +
+  fig_s13d_label + fig_s13d1 + fig_s13bd_label + fig_s13d2 + fig_s13bd_label + fig_s13d3 +
   plot_layout(ncol = 6, widths = c(0.15, 1))
 
-## align with fig s12a
-fig_s12 <- (fig_s12a + plot_spacer() + plot_layout(ncol = 2)) / fig_s12_bottom +
+## align with fig s13a
+fig_s13 <- (fig_s13a + plot_spacer() + plot_layout(ncol = 2)) / fig_s13_bottom +
   plot_layout(heights = c(1, 3)) &
   theme(plot.margin = margin(t = 7, r = 7, b = 20, l = 7, unit = "pt"))
 
-## save fig s12
-ggsave("Stat_analysis/Supp_figures/FigS12_dRECS.pdf", fig_s12,
+## save fig s13
+ggsave("Stat_analysis/Supp_figures/FigS13_dRECS.pdf", fig_s13,
        height = 24, width = 20)
 
 # =============================================================================================
@@ -2666,12 +3238,31 @@ fig_6 <- (fig_6a / fig_6_bottom) +
 ggsave("Stat_analysis/Main_figures/Fig6_dRECS.pdf", fig_6, 
        height = 12, width = 12)
 
+## create source file for fig 6b
+fig_6b_source <- bfp_fig_6b %>%
+  mutate(Panel = "b") %>%
+  select(Panel, Sample, X_lab, Editing, Percent) %>%
+  pivot_wider(names_from = Editing,
+              values_from = Percent) %>%
+  rename("X label" = X_lab)
+
+## create source file for fig 6c
+fig_6c_source <- bfp_fig_6c %>%
+  mutate(Panel = "c") %>%
+  select(Panel, Sample, X_lab, Percent) %>%
+  rename("X label" = X_lab,
+         "Percent HDR of total editing" = Percent)
+
+## append to source list
+source_data_list <- append(source_data_list, list("Fig6b" = fig_6b_source,
+                                                  "Fig6c" = fig_6c_source))
+
 ```
 
 ```{r timepoints}
 
 ## import 72 hour data
-timepoints <- read_csv("DataCompiled_longer.csv") %>%
+timepoints <- read_csv("Data/Compiled_longer.csv") %>%
   filter(Reads_passing >= 1000,
          Time == 72,
          !grepl("VEGFA", Site)) %>%
@@ -2748,19 +3339,41 @@ joined_timepoints <- inner_join(timepoint_plot, ratio_timepoints, by = "Experime
                 values_to = "plot")
 
 ## plot in order
-fig_s6 <- wrap_plots(joined_timepoints$plot, ncol = 4, widths = c(0.15, 1, 0.05, 1)) &
+fig_s7 <- wrap_plots(joined_timepoints$plot, ncol = 4, widths = c(0.15, 1, 0.05, 1)) &
   theme(plot.margin = margin(t = 7, r = 7, b = 25, l = 7, unit = "pt"))
 
-## save fig s6 - 72 hour timepoints
-ggsave("Stat_analysis/Supp_figures/FigS6_72h.pdf", fig_s6,
+## save fig s7 - 72 hour timepoints
+ggsave("Stat_analysis/Supp_figures/FigS7_72h.pdf", fig_s7,
        height = 15, width = 9)
+
+## create source file for fig s7
+fig_s7_source <- timepoint_plot %>%
+  select(Experiment, data) %>%
+  unique() %>%
+  unnest(data) %>%
+  rename("Panel" = tag) %>%
+  mutate(target = word(Site, -1),
+         X_lab = factor(X_lab, levels = c("+ + -", "+ + +", "- - -"))) %>%
+  indel_source() %>%
+  arrange(Panel, `X label`) %>%
+  mutate(Ratio = ifelse(`X label` == "- - -", NA, `Indels ON` / `Indels OT`))
+
+## split by panel
+fig_s7_list <- fig_s7_source %>%
+  named_group_split(Panel)
+
+## change names to figure panels
+names(fig_s7_list) <- paste0("FigS7", names(fig_s7_list))
+
+## append fig s5
+source_data_list <- append(source_data_list, fig_s7_list)
 
 ```
 
 ```{r guide_seq}
 
 ## read in guide-seq validation data
-gseq <- read_csv("Dataguideseq_validation.csv") %>%
+gseq <- read_csv("Data/guideseq_validation.csv") %>%
   mutate(ODN_of_indel_ON = ODN_integration_ON / ON_indels * 100,
          ODN_of_indel_OT = ODN_integration_OT1 / OT_indels * 100,
          ODN_of_indel_OT = gsub(NaN, "0", ODN_of_indel_OT),
@@ -2840,5 +3453,52 @@ fig_s2 <- fig_s2_top / fig_s2_bottom + plot_layout(heights = c(1, 3)) &
 ## save fig s2 - guide seq
 ggsave("Stat_analysis/Supp_figures/FigS2_guide-seq.pdf", fig_s2,
        height = 16, width = 16)
+
+## create source file for fig s2a
+fig_s2a_source <- gseq %>%
+  filter(grepl("*_indels", type)) %>%
+  mutate(Guide = "FANCF sgRNA2",
+         target = word(type, 1, sep = fixed("_")),
+         Panel = "a") %>%
+  select(Panel, everything()) %>%
+  select(-type, -Experiment) %>%
+  pivot_wider(names_from = target, 
+              values_from = percent)  %>%
+  rename("Name" = Sample,
+         "Indels ON" = ON,
+         "Indels OT" = OT)
+
+## create source file for fig s2b
+fig_s2b_source <- gseq %>%
+  filter(grepl("ODN_integration*", type)) %>%
+  mutate(Guide = "FANCF sgRNA2",
+         Panel = "b") %>%
+  select(Panel, everything()) %>%
+  select(-Experiment) %>%
+  pivot_wider(names_from = type, 
+              values_from = percent) %>%
+  rename_all(list(~str_replace_all(., "_", " ")))
+
+## create source file for fig s2c
+fig_s2c_source <- gseq %>%
+  filter(grepl("ODN_of_*", type)) %>%
+  mutate(Guide = "FANCF sgRNA2",
+         Panel = "c") %>%
+  select(Panel, everything()) %>%
+  select(-Experiment) %>%
+  pivot_wider(names_from = type, 
+              values_from = percent) %>%
+  rename("dsODN / indel frequency ON" = ODN_of_indel_ON,
+         "dsODN / indel frequency OT1" = ODN_of_indel_OT)
+
+## append to source data list
+source_data_list <- append(source_data_list,
+                           list("FigS2a" = fig_s2a_source,
+                                "FigS2b" = fig_s2b_source,
+                                "FigS2c" = fig_s2c_source))
+
+## arrange and write all figures to .xlsx
+source_data_list <- source_data_list[str_sort(names(source_data_list), numeric = TRUE)]
+write.xlsx(source_data_list, file = "Stat_analysis/source_data_file.xlsx", append = TRUE)
 
 ```
