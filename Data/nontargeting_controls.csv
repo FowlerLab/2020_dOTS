@@ -1,7 +1,7 @@
 Experiment,Site,Date,Sample,Name,X_lab,Indel_stringent,Indel,Reads_low_phred,Reads_no_nmer,Reads_passing,Total_indel_stringent,Total_indel
-1,FANCFg2 ON,02.08.18,NP_020818_F2_GFP_1_FANCFg2_OT1_S22_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_GFP_1, + + -,24.69694615,24.70277411,12,3000,51476,12713,12716
-1,FANCFg2 ON,02.08.18,NP_020818_F2_GFP_2_FANCFg2_OT1_S23_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_GFP_2, + + -,24.3863112,24.40021128,8,1731,35971,8772,8777
-1,FANCFg2 ON,02.08.18,NP_020818_F2_GFP_3_FANCFg2_OT1_S24_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_GFP_3, + + -,24.57692778,24.58100559,9,2491,49046,12054,12056
+1,FANCFg2 ON,02.08.18,NP_020818_F2_GFP_1_FANCFg2_ON_S1_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_GFP_1, + + -,24.69694615,24.70277411,12,3000,51476,12713,12716
+1,FANCFg2 ON,02.08.18,NP_020818_F2_GFP_2_FANCFg2_ON_S2_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_GFP_2, + + -,24.3863112,24.40021128,8,1731,35971,8772,8777
+1,FANCFg2 ON,02.08.18,NP_020818_F2_GFP_3_FANCFg2_ON_S3_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_GFP_3, + + -,24.57692778,24.58100559,9,2491,49046,12054,12056
 1,FANCFg2 ON,02.08.18,NP_020818_F2_d1_1_FANCFg2_ON_S4_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_d1_1, + + 1,28.14076034,28.14980664,10,2179,44217,12443,12447
 1,FANCFg2 ON,02.08.18,NP_020818_F2_d1_2_FANCFg2_ON_S5_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_d1_2, + + 1,27.93505412,27.95066611,5,1948,38432,10736,10742
 1,FANCFg2 ON,02.08.18,NP_020818_F2_d1_3_FANCFg2_ON_S6_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_d1_3, + + 1,26.03568008,26.0436622,11,2642,50112,13047,13051

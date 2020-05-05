@@ -817,6 +817,8 @@ source_data_list <- append(source_data_list,
                                 "Fig2b - plot" = fig_2b_source,
                                 "FigS8a - plot" = fig_s8a_source,
                                 "FigS8b - plot" = fig_s8b_source))
+
+
 ```
 
 ```{r ciCas9}
@@ -1062,6 +1064,7 @@ v3_titration <- read_csv("Data/titrations.csv") %>%
          Site = gsub("g", " sgRNA", Site),
          guide = word(Site, start = 1, end = 2),
          Panel = "b")
+
 
 ## calculate ratio
 v3_titration_ratio <- ratio_calc(v3_titration) %>%
@@ -2236,6 +2239,7 @@ write_csv(dRNA_only_table_s3, "Stat_analysis/Supp_tables/TableS3_dRNA_only_contr
 # output table
 kable(dRNA_only_table) %>%
   kable_styling(latex_options="scale_down")
+
 ```
 
 ```{r nontargeting controls}
@@ -2424,8 +2428,8 @@ u2os_ratio_f <- u2os_ratio %>%
 ## plot indel data - U2OS
 fig_1d1 <- ggplot(data = u2os_f,
                   aes(fct_inorder(X_lab), Indel_stringent, fill = Site)) +
-  geom_blank(aes(y = ymin)) +
-  geom_blank(aes(y = ymax)) +
+  #geom_blank(aes(y = ymin)) +
+  #geom_blank(aes(y = ymax)) +
   geom_beeswarm(size = 2.5, cex = 2, pch = 21, alpha = 0.7) +
   stat_summary(data = u2os_f, fun = "mean",
                geom = "point", pch = "_", size = 8) +
@@ -3500,5 +3504,134 @@ source_data_list <- append(source_data_list,
 ## arrange and write all figures to .xlsx
 source_data_list <- source_data_list[str_sort(names(source_data_list), numeric = TRUE)]
 write.xlsx(source_data_list, file = "Stat_analysis/source_data_file.xlsx", append = TRUE)
+
+## get all files used in analysis for data collection
+dRNA_only_all <- read_csv("Data/dRNA_only_controls.csv") %>%
+  filter(Experiment != 5) %>%
+  mutate(source = "dRNA only")
+
+titrations2 <- titrations %>%
+  ungroup() %>%
+  mutate(Experiment = as.numeric(Experiment)) %>%
+  unnest(cols = c(Experiment, data)) %>%
+  bind_rows(v3_titration) %>%
+  mutate(X_lab = as.character(X_lab))
+
+nontargeting2 <- nontargeting %>%
+  ungroup() %>%
+  mutate(Experiment = as.numeric(Experiment)) %>%
+  unnest(cols = c(Experiment, data)) %>%
+  bind_rows(nontargeting_FANCF)
+
+timepoints2 <- timepoints %>%
+  ungroup() %>%
+  mutate(Experiment = as.numeric(Experiment)) %>%
+  unnest(cols = as.numeric())
+
+gseq2 <- read_csv("Data/guideseq_val_filenames.csv")
+
+gseq_full <- read_csv("Data/guideseq_filenames.csv")
+
+## bind together and classify
+all_files <- bind_rows("dRNA screens" = dRNA_screens %>% filter(Experiment != 24),
+                       "ciCas9" = cicas9,
+                       "truncated VEGFA" = tru_vegfa,
+                       "dRNA titrations" = titrations2,
+                       "nontargeting" = nontargeting2,
+                       "HiFi Cas9" = hifi,
+                       "mdOTS" = mdots,
+                       "dRNA only controls" = dRNA_only_all,
+                       "U2OS" = u2os,
+                       "ELF-1" = elf,
+                       "72h timepoint" = timepoints2,
+                       "GUIDEseq validation" = gseq2,
+                       "GUIDEseq" = gseq_full, 
+                       .id = "id") %>%
+  filter(!is.na(Sample),
+         !grepl("predicted", Site),
+         !grepl("trG10", Site)) %>%
+  mutate(filename = gsub("wtf-difflib_indels.csv", "", Sample),
+         dRNA = case_when(str_detect(id, "mdOTS") ~ gsub("_", " ",
+                                          gsub("GFP", "no dRNA",
+                                               gsub("d", "-dRNA",
+                                                    gsub("_[0-9]", "",
+                                                         gsub("^[^g]*g[0-9]", "", Name))))),
+           str_detect(Name, "d[0-9]s") ~ gsub("d", "dRNA", str_extract(Name, "d[0-9]s")),
+           str_detect(Name, "d[0-9]") ~ gsub("d", "dRNA", str_extract(Name, "d[0-9]")),
+           str_detect(Name, "GFP") ~ "no dRNA",
+           str_detect(Name, "dNT") ~ "nontargeting dRNA",
+           str_detect(Name, "NT") ~ "NT",
+           str_detect(Name, "_0_[0-9]") ~ "no dRNA",
+           str_detect(Name, "_[0-9]_[0-9]") ~ gsub("d", "dRNA", str_extract(Sample, "d[0-9]")),
+           str_detect(Name, "_[0-9].[0-9]+_[0-9]") ~ gsub("d", "dRNA", str_extract(Sample, "d[0-9]")),
+           str_detect(Name, "Electroporate") ~ "NT",
+           id == "GUIDEseq" ~ "",
+           str_detect(Name, "ODN") ~ gsub("_", " + ", Name),
+           str_detect(Name, "FANCF sgRNA2 \\+ dRNA1") ~ "dRNA1",
+           str_detect(Name, "dRNA1") ~ "dRNA1 only",
+           str_detect(Name, "non-targeting") ~ "nontargeting dRNA",
+           TRUE ~ "no dRNA"),
+         library_layout = if_else(str_detect(filename, "assembled") == TRUE,
+                                  "paired", "single"),
+         instrument_model = if_else(id == "GUIDEseq", "Illumina MiSeq", "NextSeq 550"),
+         library_ID = if_else(library_layout == "paired",
+                              gsub("_pear.fastq.assembled.fastq", "", filename),
+                              gsub(".fastq", "", filename)),
+         replicate = case_when(str_detect(id, "GUIDE*") == TRUE ~ "1",
+           str_detect(id, "ciCas9") == TRUE ~ as.character(Replicate),
+           TRUE ~ word(Name, -1, sep = fixed("_"))),
+         library_strategy = if_else(id == "GUIDEseq", "OTHER", "AMPLICON"),
+         library_source = "GENOMIC",
+         library_selection = "PCR",
+         platform = "ILLUMINA",
+         Site = case_when(str_detect(Site, "g[0-9]") == TRUE ~ gsub("g", " sgRNA", Site),
+           id == "ciCas9" & Site == "on-target" ~ "FANCF sgRNA2 ON",
+           id == "ciCas9" & Site == "off-target" ~ "FANCF sgRNA2 OT1",
+           id == "GUIDEseq" ~ "whole genome",
+           grepl("-R0[0-9]", Site) == TRUE ~ gsub("-R0[0-9]", "", Site),
+           TRUE ~ Site),
+         wording = paste(id, "- Genomic sequencing of the", Site),
+         design_description = if_else(id == "GUIDEseq", "Whole genome off-target sequencing.", 
+                                      "A locus of interest was amplified from genomic DNA and sequenced."),
+         filetype = "fastq",
+         title = case_when(id == "dRNA screens" & grepl("080917_NT_[0-9]_VEGFg3_ON", filename) == TRUE ~ paste0("HiFi Cas9 & ", wording, " locus. dRNA: ", dRNA, "; Cas9 species: none; Replicate: ", replicate),
+                           id == "dRNA screens" ~ paste0(wording, " locus. dRNA: ", dRNA, "; Replicate:", replicate),
+           id == "ciCas9" ~ paste0(wording, " locus. dRNA: ", dRNA, "; Time:", Time, "hours; Replicate:", replicate),
+           id == "truncated VEGFA" ~ paste0(wording, " locus. dRNA: ", dRNA, "; Replicate:", replicate),
+           id == "dRNA titrations" & grepl("R03_GFP", filename) == TRUE ~ paste("nontargeting and", wording, " locus. dRNA: ", dRNA,
+                                                                                "; dRNA:sgRNA ratio: ", X_lab,
+                                                                                "; Replicate: ", replicate),
+           id == "dRNA titrations" & grepl("R03_d4_1_1", filename) == TRUE ~ paste0("nontargeting and ", wording, " locus. dRNA: ", dRNA,
+                                                                                "; dRNA:sgRNA ratio: ", X_lab,
+                                                                                "; Replicate: ", replicate),
+           id == "dRNA titrations" ~ paste0(wording, " locus. dRNA: ", dRNA, "; dRNA:sgRNA ratio: ", X_lab, "; Replicate: ", replicate),
+           id == "nontargeting" ~ paste0(wording, " locus. dRNA: ", dRNA, "; Replicate:", replicate),
+           id == "HiFi Cas9" & dRNA == "NT" & grepl("17115_NT_[0-9]_FANCFg2", library_ID) == TRUE ~ paste0("mdOTS, dRNA only controls, & ", wording, " locus. dRNA: ", dRNA, "; Cas9 species: none; Replicate: ", replicate),
+           id == "HiFi Cas9" & dRNA == "NT" ~ paste0(wording, " locus. dRNA: ", dRNA, "; Cas9 species: none; Replicate: ", replicate),
+           id == "HiFi Cas9" ~ paste0(wording, " locus. dRNA: ", dRNA, "; Cas9 species:", Cas9, "; Replicate: ", replicate),
+           id == "mdOTS" & grepl("17115_NT_[0-9]_VEGFg2", filename) == TRUE ~ paste0("dRNA only controls & ", wording, " locus. dRNA: ", dRNA, "; Replicate: ", replicate),
+           id == "mdOTS" & grepl("17115_NT_[0-9]_ZSCAN", filename) == TRUE ~ paste0("dRNA only controls & ", wording, " locus. dRNA: ", dRNA, "; Replicate: ", replicate),
+           id == "mdOTS" ~ paste0(wording, " locus. dRNA: ", dRNA, "; Replicate: ", replicate),
+           id == "dRNA only controls" ~ paste0(wording, " locus. dRNA: ", dRNA, "; Replicate: ", replicate),
+           id == "U2OS" ~ paste0(wording, " locus. dRNA: ", dRNA, "; Replicate: ", replicate),
+           id == "ELF-1" ~ paste0(wording, " locus. dRNA: ", dRNA, "; Replicate: ", replicate),
+           id == "72h timepoint" ~ paste0(wording, " locus. dRNA: ", dRNA, "; Replicate: ", replicate),
+           id == "GUIDEseq validation" ~ paste0(wording, " locus. dRNA: ", dRNA, "; Replicate: ", replicate),
+           id == "GUIDEseq" ~ paste0(wording, ". ", File),
+           TRUE ~ "fix")) %>%
+  select(library_ID, title, library_strategy, library_source, library_selection, library_layout,
+         platform, instrument_model, design_description, filetype, filename) %>%
+  distinct(filename, .keep_all = TRUE) %>%
+  #distinct() %>%
+  mutate(filename3 = if_else(grepl("pear", filename),
+                             gsub("pear.fastq.assembled.fastq", "R1_001.fastq", filename),
+                             filename),
+         filename2 = if_else(grepl("pear", filename),
+                             gsub("pear.fastq.assembled.fastq", "R2_001.fastq", filename), "")) %>%
+  select(-filename) %>%
+  rename("filename" = filename3)
+
+## write SRA metadata file
+write_csv(all_files, "Seq_analysis/200426_SRA_file_descriptions.csv")
 
 ```

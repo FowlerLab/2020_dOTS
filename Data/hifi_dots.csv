@@ -36,8 +36,8 @@ Experiment,Site,Date,Sample,Name,Cas9,X_lab,Indel_stringent,Indel,Reads_low_phre
 1,FANCFg2 ON,08.24.17,082417_NT_2_FANCFg2_ON_S197_R1_001.fastqwtf-difflib_indels.csv,NT_2,HF1, - - -,0.013463027,0.026926054,13344,2621,29711,4,8,9
 1,FANCFg2 ON,08.24.17,082417_NT_3_FANCFg2_ON_S198_R1_001.fastqwtf-difflib_indels.csv,NT_3,HF1, - - -,0.014882429,0.029764858,16818,2053,20158,3,6,9
 1,FANCFg2 ON,11.15.17,NP_17115_HypaF_GFP_1_FANCFg2_ON_S769_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_Hypa_GFP_1,Hypa,Hypa + -,5.414755813,5.416767238,9,4910,99432,5384,5386,7
-1,FANCFg2 ON,11.15.17,NP_17115_HypaF_GFP_1_FANCFg2_ON_S769_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_Hypa_GFP_2,Hypa,Hypa + -,6.05107861,6.05107861,15,6651,121499,7352,7352,7
-1,FANCFg2 ON,11.15.17,NP_17115_HypaF_GFP_1_FANCFg2_ON_S769_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_Hypa_GFP_3,Hypa,Hypa + -,6.584543048,6.595055381,11,3465,104639,6890,6901,7
+1,FANCFg2 ON,11.15.17,NP_17115_HypaF_GFP_2_FANCFg2_ON_S770_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_Hypa_GFP_2,Hypa,Hypa + -,6.05107861,6.05107861,15,6651,121499,7352,7352,7
+1,FANCFg2 ON,11.15.17,NP_17115_HypaF_GFP_3_FANCFg2_ON_S771_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_Hypa_GFP_3,Hypa,Hypa + -,6.584543048,6.595055381,11,3465,104639,6890,6901,7
 1,FANCFg2 ON,11.15.17,NP_17115_HypaF_d1-1_1_FANCFg2_ON_S772_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_Hypa_d1_1-1_1,Hypa,Hypa + 1,4.762882365,4.779306097,15,7335,146130,6960,6984,8
 1,FANCFg2 ON,11.15.17,NP_17115_HypaF_d1-1_2_FANCFg2_ON_S773_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_Hypa_d1_1-1_2,Hypa,Hypa + 1,4.39305201,4.397056615,14,3904,99885,4388,4392,8
 1,FANCFg2 ON,11.15.17,NP_17115_HypaF_d1-1_3_FANCFg2_ON_S774_pear.fastq.assembled.fastqwtf-difflib_indels.csv,FANCFg2_Hypa_d1_1-1_3,Hypa,Hypa + 1,4.178656324,4.179907419,6,2582,79930,3340,3341,8
