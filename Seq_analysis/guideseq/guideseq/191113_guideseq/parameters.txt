@@ -1,0 +1,1 @@
+Guide-seq parameters: 20 mismatches, 50 bp window, 10000 miniumum reads per index

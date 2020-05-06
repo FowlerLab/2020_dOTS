@@ -57,9 +57,9 @@ if (!require(openxlsx)) install.packages('openxlsx')
 library(openxlsx)
 
 ## Create directories for figures, tables, etc.
-dir.create(path = "./Main_figures")
-dir.create(path = "./Supp_figures")
-dir.create(path = "./Supp_tables")
+dir.create(path = "./Stat_analysis/Main_figures")
+dir.create(path = "./Stat_analysis/Supp_figures")
+dir.create(path = "./Stat_analysis/Supp_tables")
 
 ## set up color palette
 pal <- c("#CA0020", "#92C5DE", "#F4A582", "#0571B0", "#999999")
