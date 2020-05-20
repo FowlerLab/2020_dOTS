@@ -2543,16 +2543,18 @@ source_data_list <- append(source_data_list, list("FigS6a" = fig_s6a_source))
 ```{r ELF}
 
 ## read in data from ELF cells
-elf <- read_csv("Data/elf.csv") %>%
+elf <- read_csv("Data/ELF.csv") %>%
   filter(Reads_passing >= 1000) %>%
   mutate(guide = word(Site, 1),
          Site = gsub("g", " sgRNA", Site),
          guide = gsub("g", " sgRNA", guide),
          target = word(Site, -1),
-         X_lab = gsub("[0-9]", "+", X_lab))
+         X_lab = gsub("[0-9]", "+", X_lab),
+         X_lab = word(X_lab, start = 1, end = 3))
 
 ## calculate ratios for ELF 
-elf_ratio <- filter(elf, X_lab != "- - - +") %>%
+elf_ratio <- filter(elf, X_lab != "- - -") %>%
+  filter(X_lab != "+ - -") %>%
   ratio_calc() %>%
   group_by(X_lab, Experiment) %>%
   mutate(avg = mean(ratio, na.rm = TRUE),
@@ -2619,7 +2621,7 @@ fig_1e_label <- label_plot(data = elf_f,
                            aes(x = as_factor(Experiment),
                                y = Indel_stringent)) +
   geom_point(color = "NA") +
-  scale_x_discrete(labels = "\niCas9\n\nFANCF sgRNA2\n\ndRNA\n\nDox")
+  scale_x_discrete(labels = "\niCas9\n\nFANCF sgRNA2\n\ndRNA")
 
 fig_1e1_label <- fig_1e_label +
   labs(title = "e")
@@ -2722,7 +2724,7 @@ fig_s6b_label <- label_plot(data = elf_h,
                             aes(x = as_factor(Experiment),
                                 y = Indel_stringent)) +
   geom_point(color = "NA") +
-  scale_x_discrete(labels = "\niCas9\n\nHBB-R03\n\ndRNA\n\nDox")
+  scale_x_discrete(labels = "\niCas9\n\nHBB-R03\n\ndRNA")
 
 fig_s6b1_label <- fig_s6b_label +
   labs(title = "b")
